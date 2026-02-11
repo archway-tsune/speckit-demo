@@ -53,3 +53,4 @@ yarn.lock
 
 # Windows reserved device names (Win11 26200+ no longer treats nul as device)
 nul
+pnpm-lock.yaml
