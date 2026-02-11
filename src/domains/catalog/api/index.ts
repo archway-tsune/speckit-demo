@@ -1,44 +1,25 @@
 /**
- * Catalog ドメイン - API スタブ実装
- * 本番実装で置き換え予定。すべての関数は NotImplementedError をスローする。
+ * Catalog ドメイン - API エクスポート
+ * 本番ユースケース実装を公開する。
  */
 
+export {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  NotFoundError,
+} from './usecases';
+export type { CatalogContext } from './usecases';
+
 /**
- * ドメイン未実装エラー
+ * ドメイン未実装エラー（後方互換性のため残存）
+ * 本番実装完了後は使用されないが、既存の Route ハンドラの catch 句で参照されるため維持。
  */
 export class NotImplementedError extends Error {
   constructor(domain: string, operation: string) {
     super(`ドメイン未実装: ${domain}.${operation}`);
     this.name = 'NotImplementedError';
   }
-}
-
-/**
- * リソース未存在エラー（スタブ）
- */
-export class NotFoundError extends Error {
-  constructor(message = 'リソースが見つかりません') {
-    super(message);
-    this.name = 'NotFoundError';
-  }
-}
-
-export function getProducts(..._args: unknown[]): never {
-  throw new NotImplementedError('catalog', 'getProducts');
-}
-
-export function getProductById(..._args: unknown[]): never {
-  throw new NotImplementedError('catalog', 'getProductById');
-}
-
-export function createProduct(..._args: unknown[]): never {
-  throw new NotImplementedError('catalog', 'createProduct');
-}
-
-export function updateProduct(..._args: unknown[]): never {
-  throw new NotImplementedError('catalog', 'updateProduct');
-}
-
-export function deleteProduct(..._args: unknown[]): never {
-  throw new NotImplementedError('catalog', 'deleteProduct');
 }
