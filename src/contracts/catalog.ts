@@ -20,6 +20,7 @@ export const ProductSchema = z.object({
   price: z.number().int().min(0),
   description: z.string().max(2000).optional(),
   imageUrl: z.string().url().optional(),
+  stock: z.number().int().min(0).default(0),
   status: ProductStatusSchema,
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -149,6 +150,7 @@ export interface ProductRepository {
     status?: Product['status'];
     offset: number;
     limit: number;
+    query?: string;
   }): Promise<Product[]>;
   findById(id: string): Promise<Product | null>;
   create(
@@ -159,5 +161,5 @@ export interface ProductRepository {
     data: Partial<Omit<Product, 'id' | 'createdAt' | 'updatedAt'>>
   ): Promise<Product>;
   delete(id: string): Promise<void>;
-  count(status?: Product['status']): Promise<number>;
+  count(status?: Product['status'], query?: string): Promise<number>;
 }

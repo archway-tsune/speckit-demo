@@ -4,86 +4,48 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProductById, updateProduct, deleteProduct } from '@/domains/catalog/api';
 import { productRepository } from '@/infrastructure/repositories';
-import { getServerSession, createGuestSession } from '@/infrastructure/auth';
-import { success, error } from '@/foundation/errors/response';
-import { handleError, ErrorCode } from '@/foundation/errors/handler';
-import { logger } from '@/foundation/logging/logger';
+import { getServerSession } from '@/infrastructure/auth';
+import { createGuestSession } from '@/infrastructure/auth';
+import { success } from '@/foundation/errors/response';
+import { createRouteHandler } from '@/templates/api/route-handler';
+import type { Session } from '@/foundation/auth/session';
+
+const publicHandler = createRouteHandler<Session>({ getSession: getServerSession, requireAuth: false });
+const authHandler = createRouteHandler<Session>({ getSession: getServerSession });
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(request: NextRequest, { params }: Params) {
-  try {
-    // 商品詳細は公開API（認証不要）
-    const session = await getServerSession();
-
-    const { id } = await params;
-    const result = await getProductById({ id }, {
+export async function GET(request: NextRequest, routeParams: Params) {
+  return publicHandler.handler(request, async (_req, ctx) => {
+    const session = ctx.session as Session | null;
+    const result = await getProductById({ id: ctx.params.id }, {
       session: session || createGuestSession(),
       repository: productRepository,
     });
 
     return NextResponse.json(success(result));
-  } catch (err) {
-    const result = handleError(err);
-    logger.error('GET /api/catalog/products/[id] error:', err instanceof Error ? err : undefined);
-    return NextResponse.json(
-      error(result.code, result.message, result.fieldErrors),
-      { status: result.httpStatus }
-    );
-  }
+  }, routeParams);
 }
 
-export async function PUT(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json(
-        error(ErrorCode.UNAUTHORIZED, 'ログインが必要です'),
-        { status: 401 }
-      );
-    }
-
-    const { id } = await params;
-    const body = await request.json();
-    const result = await updateProduct({ ...body, id }, {
-      session,
+export async function PUT(request: NextRequest, routeParams: Params) {
+  return authHandler.handler(request, async (req, ctx) => {
+    const body = await req.json();
+    const result = await updateProduct({ ...body, id: ctx.params.id }, {
+      session: ctx.session,
       repository: productRepository,
     });
 
     return NextResponse.json(success(result));
-  } catch (err) {
-    const result = handleError(err);
-    logger.error('PUT /api/catalog/products/[id] error:', err instanceof Error ? err : undefined);
-    return NextResponse.json(
-      error(result.code, result.message, result.fieldErrors),
-      { status: result.httpStatus }
-    );
-  }
+  }, routeParams);
 }
 
-export async function DELETE(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json(
-        error(ErrorCode.UNAUTHORIZED, 'ログインが必要です'),
-        { status: 401 }
-      );
-    }
-
-    const { id } = await params;
-    const result = await deleteProduct({ id }, {
-      session,
+export async function DELETE(request: NextRequest, routeParams: Params) {
+  return authHandler.handler(request, async (_req, ctx) => {
+    const result = await deleteProduct({ id: ctx.params.id }, {
+      session: ctx.session,
       repository: productRepository,
     });
 
     return NextResponse.json(success(result));
-  } catch (err) {
-    const result = handleError(err);
-    logger.error('DELETE /api/catalog/products/[id] error:', err instanceof Error ? err : undefined);
-    return NextResponse.json(
-      error(result.code, result.message, result.fieldErrors),
-      { status: result.httpStatus }
-    );
-  }
+  }, routeParams);
 }

@@ -1,15 +1,21 @@
 /**
- * Catalog ドメイン - API スタブ実装
- * 本番実装で置き換え予定。すべての関数は NotImplementedError をスローする。
+ * Catalog ドメイン - API 実装
  */
+// @see barrel: Layout, Header, Footer, ToastProvider, useToast, ConfirmDialog, Loading,
+//              Error, Empty, AlertBanner, ProductCard, ImagePlaceholder, QuantitySelector,
+//              Button, FormField, TextInput, TextArea, Select, SearchBar, Pagination,
+//              BackButton, StatusBadge, DataView, useFetch, useFormSubmit,
+//              formatPrice, formatDateTime, formatDate, deserializeDates, emitCartUpdated (@/components)
 import type { SessionData } from '@/foundation/auth/session';
-import type {
-  ProductRepository,
-  GetProductsOutput,
-  GetProductByIdOutput,
-  CreateProductOutput,
-  UpdateProductOutput,
-  DeleteProductOutput,
+import { validate } from '@/foundation/validation/runtime';
+import {
+  GetProductsInputSchema,
+  type ProductRepository,
+  type GetProductsOutput,
+  type GetProductByIdOutput,
+  type CreateProductOutput,
+  type UpdateProductOutput,
+  type DeleteProductOutput,
 } from '@/contracts/catalog';
 import { NotImplementedError, NotFoundError } from '@/foundation/errors/domain-errors';
 
@@ -24,11 +30,21 @@ export interface CatalogContext {
   repository: ProductRepository;
 }
 
-export function getProducts(_rawInput: unknown, _context: CatalogContext): Promise<GetProductsOutput> {
-  throw new NotImplementedError('catalog', 'getProducts');
+export async function getProducts(rawInput: unknown, context: CatalogContext): Promise<GetProductsOutput> {
+  const input = validate(GetProductsInputSchema, rawInput);
+  const page = input.page ?? 1;
+  const limit = input.limit ?? 20;
+  const status = context.session.role === 'buyer' ? 'published' : (input.status || undefined);
+  const offset = (page - 1) * limit;
+  const [products, total] = await Promise.all([
+    context.repository.findAll({ status, offset, limit }),
+    context.repository.count(status),
+  ]);
+  const totalPages = total === 0 ? 0 : Math.ceil(total / limit);
+  return { products, pagination: { page, limit, total, totalPages } };
 }
 
-export function getProductById(_rawInput: unknown, _context: CatalogContext): Promise<GetProductByIdOutput> {
+export async function getProductById(rawInput: unknown, context: CatalogContext): Promise<GetProductByIdOutput> {
   throw new NotImplementedError('catalog', 'getProductById');
 }
 

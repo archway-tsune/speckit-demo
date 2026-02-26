@@ -28,7 +28,7 @@ description: "カタログ閲覧機能 タスクリスト"
 
 **目的**: 依存関係の確認
 
-- [ ] T001 依存関係確認: `pnpm install` を実行して node_modules が最新状態であることを確認
+- [x] T001 依存関係確認: `pnpm install` を実行して node_modules が最新状態であることを確認
 
 ---
 
@@ -38,8 +38,8 @@ description: "カタログ閲覧機能 タスクリスト"
 
 ⚠️ **CRITICAL**: このフェーズが完了するまでユーザーストーリーの実装を開始しない
 
-- [ ] T002 [P] src/contracts/catalog.ts を変更: `ProductSchema` に `stock: z.number().int().min(0).default(0)` を追加、`ProductRepository.findAll` の params に `query?: string` を追加（※ q の InputSchema 追加は US3 Green で行う）
-- [ ] T003 [P] src/infrastructure/repositories/product.ts の `PRODUCTS` 配列を 15件の published 商品に拡充: Lorem Picsum 画像（`https://picsum.photos/seed/{seed}/400/400`）、stock フィールド付き、在庫切れ2件（stock=0）・imageUrl なし1件を含む（data-model.md 参照）
+- [x] T002 [P] src/contracts/catalog.ts を変更: `ProductSchema` に `stock: z.number().int().min(0).default(0)` を追加、`ProductRepository.findAll` の params に `query?: string` を追加（※ q の InputSchema 追加は US3 Green で行う）
+- [x] T003 [P] src/infrastructure/repositories/product.ts の `PRODUCTS` 配列を 15件の published 商品に拡充: Lorem Picsum 画像（`https://picsum.photos/seed/{seed}/400/400`）、stock フィールド付き、在庫切れ2件（stock=0）・imageUrl なし1件を含む（data-model.md 参照）
 
 **チェックポイント**: コントラクトとテストデータ準備完了
 
@@ -49,20 +49,20 @@ description: "カタログ閲覧機能 タスクリスト"
 
 **目的**: 全ストーリー分のスタブを一括生成しテスト基盤を確立
 
-- [ ] T004 前準備: `src/components/index.ts`, `src/templates/index.ts`, `src/app/(samples)/sample/api/catalog/products/route.ts`, `src/app/(samples)/sample/api/catalog/products/[id]/route.ts`, `src/components/hooks/useFetch.ts`, `src/samples/domains/catalog/ui/ProductList.tsx`, `src/samples/domains/catalog/ui/ProductDetail.tsx` を Read してバレル・フック API・サンプルパターンを把握する
+- [x] T004 前準備: `src/components/index.ts`, `src/templates/index.ts`, `src/app/(samples)/sample/api/catalog/products/route.ts`, `src/app/(samples)/sample/api/catalog/products/[id]/route.ts`, `src/components/hooks/useFetch.ts`, `src/samples/domains/catalog/ui/ProductList.tsx`, `src/samples/domains/catalog/ui/ProductDetail.tsx` を Read してバレル・フック API・サンプルパターンを把握する
 
-- [ ] T005 src/app/api/catalog/products/route.ts を `createRouteHandler` パターンに書き換え: サンプル route（T004 で読み込み済み）を参照し、手書き try-catch を削除。GET は `requireAuth: false` で公開、POST は認証必須
+- [x] T005 src/app/api/catalog/products/route.ts を `createRouteHandler` パターンに書き換え: サンプル route（T004 で読み込み済み）を参照し、手書き try-catch を削除。GET は `requireAuth: false` で公開、POST は認証必須
 
-- [ ] T006 src/app/api/catalog/products/[id]/route.ts を `createRouteHandler` パターンに書き換え: GET は `requireAuth: false`、PUT/DELETE は認証必須
+- [x] T006 src/app/api/catalog/products/[id]/route.ts を `createRouteHandler` パターンに書き換え: GET は `requireAuth: false`、PUT/DELETE は認証必須
 
-- [ ] T007 src/domains/catalog/api/index.ts と src/domains/catalog/ui/index.tsx のスタブを更新: T002 で追加した `stock` フィールドを含む型で型チェックが通る状態に調整。api/index.ts の先頭に以下を付与:
+- [x] T007 src/domains/catalog/api/index.ts と src/domains/catalog/ui/index.tsx のスタブを更新: T002 で追加した `stock` フィールドを含む型で型チェックが通る状態に調整。api/index.ts の先頭に以下を付与:
   ```
   // @see barrel: ProductCard, ImagePlaceholder, SearchBar, Pagination, BackButton,
   //              useFetch, useFormSubmit, formatPrice, Loading, Empty, Button
   ```
   ui/index.tsx の関数本体はスタブのまま（JSX 返却禁止、`throw new NotImplementedError('catalog', '<funcName>')` のみ）
 
-- [ ] T008 src/app/(buyer)/catalog/page.tsx と src/app/(buyer)/catalog/[id]/page.tsx を Read して既存のコンテナラッパー構造を確認。変更不要な場合はスキップ
+- [x] T008 src/app/(buyer)/catalog/page.tsx と src/app/(buyer)/catalog/[id]/page.tsx を Read して既存のコンテナラッパー構造を確認。変更不要な場合はスキップ
 
 **チェックポイント**: `pnpm typecheck` がエラーなしで通ること
 
@@ -77,27 +77,27 @@ description: "カタログ閲覧機能 タスクリスト"
 
 ⚠️ 禁止: 引数なし `toThrow()`、条件付きアサーション(`if→expect`)、`it.todo`/`skip`、テスト名「未実装」
 
-- [ ] T009 [P] [US1] `tests/unit/domains/catalog/us1/usecase.test.ts` を作成 (AC-1,2,3,4,5, FR-001,003,004,005)。テスト対象: `getProducts`（published のみ返す、ページネーション計算、stock=0 商品を含む）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` で全テスト FAIL 確認
+- [x] T009 [P] [US1] `tests/unit/domains/catalog/us1/usecase.test.ts` を作成 (AC-1,2,3,4,5, FR-001,003,004,005)。テスト対象: `getProducts`（published のみ返す、ページネーション計算、stock=0 商品を含む）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` で全テスト FAIL 確認
 
-- [ ] T010 [P] [US1] `tests/unit/domains/catalog/us1/ui.test.tsx` を作成 (AC-1,2,3,4,5, FR-002,003,004,005)。テスト対象: `ProductList`（12件表示、ページネーション表示/非表示、在庫切れバッジ、空表示「商品がありません」）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` で FAIL 確認
+- [x] T010 [P] [US1] `tests/unit/domains/catalog/us1/ui.test.tsx` を作成 (AC-1,2,3,4,5, FR-002,003,004,005)。テスト対象: `ProductList`（12件表示、ページネーション表示/非表示、在庫切れバッジ、空表示「商品がありません」）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` で FAIL 確認
 
-- [ ] T011 [P] [US1] `tests/integration/domains/catalog/us1/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProducts` ← 入出力スキーマ整合、buyer ロールで published のみ取得。`pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` で FAIL 確認
+- [x] T011 [P] [US1] `tests/integration/domains/catalog/us1/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProducts` ← 入出力スキーマ整合、buyer ロールで published のみ取得。`pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` で FAIL 確認
 
-- [ ] T012 [US1] `tests/e2e/catalog-us1.spec.ts` を作成 (AC-1〜5)。URL: `/catalog`。シナリオ: 認証なしアクセス可、カード表示、ページネーション「次へ」で2ページ目、在庫切れバッジ確認、空表示（`/api/test/reset` でデータクリア後）。`pnpm test:e2e --retries 0 tests/e2e/catalog-us1.spec.ts 2>&1` で FAIL 確認
+- [x] T012 [US1] `tests/e2e/catalog-us1.spec.ts` を作成 (AC-1〜5)。URL: `/catalog`。シナリオ: 認証なしアクセス可、カード表示、ページネーション「次へ」で2ページ目、在庫切れバッジ確認、空表示（`/api/test/reset` でデータクリア後）。`pnpm test:e2e --retries 0 tests/e2e/catalog-us1.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
 テストコード変更禁止。実装コードのみで全テストを PASS させる。
 
-- [ ] T013 [US1] `src/domains/catalog/api/index.ts` の `getProducts` を実装: `validate(GetProductsInputSchema, rawInput)` → buyer は status='published' 強制 → `Promise.all([repo.findAll, repo.count])` → pagination 計算して返す。サンプル: `src/samples/domains/catalog/api/index.ts`。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` で PASS 確認
+- [x] T013 [US1] `src/domains/catalog/api/index.ts` の `getProducts` を実装: `validate(GetProductsInputSchema, rawInput)` → buyer は status='published' 強制 → `Promise.all([repo.findAll, repo.count])` → pagination 計算して返す。サンプル: `src/samples/domains/catalog/api/index.ts`。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` で PASS 確認
 
-- [ ] T014 [US1] `src/domains/catalog/ui/index.tsx` の `ProductList` を実装: `useFetch('/api/catalog/products', { page, limit: '12' })` でデータ取得 → `ProductCard` を `<div className="relative">` でラップして stock=0 時に「在庫切れ」バッジオーバーレイ → `Pagination` → 空表示は `Empty`（`src/components/feedback`）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で PASS 確認
+- [x] T014 [US1] `src/domains/catalog/ui/index.tsx` の `ProductList` を実装: `useFetch('/api/catalog/products', { page, limit: '12' })` でデータ取得 → `ProductCard` を `<div className="relative">` でラップして stock=0 時に「在庫切れ」バッジオーバーレイ → `Pagination` → 空表示は `Empty`（`src/components/feedback`）。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で PASS 確認
 
-- [ ] T015 [US1] `src/app/(buyer)/nav.ts` に `{ href: '/catalog', label: '商品一覧' }` を追加。`pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で PASS 確認
+- [x] T015 [US1] `src/app/(buyer)/nav.ts` に `{ href: '/catalog', label: '商品一覧' }` を追加。`pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T016 [US1] US1 で変更したコード（`getProducts`, `ProductList`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で全 PASS 確認
+- [x] T016 [US1] US1 で変更したコード（`getProducts`, `ProductList`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us1/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us1/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us1.spec.ts 2>&1` で全 PASS 確認
 
 **チェックポイント**: US1 が独立して動作・テスト通過済み
 
