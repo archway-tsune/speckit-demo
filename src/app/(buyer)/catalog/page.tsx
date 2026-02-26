@@ -1,14 +1,12 @@
 'use client';
 /** CatalogPage - 商品一覧ページ */
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { ProductList } from '@/domains/catalog/ui';
 import { DataView } from '@/components/data-display/DataView';
 import { useFetch } from '@/components/hooks/useFetch';
 import type { GetProductsOutput } from '@/contracts/catalog';
 
 export default function CatalogPage() {
-  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 

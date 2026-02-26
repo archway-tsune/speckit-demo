@@ -180,9 +180,9 @@ description: "カタログ閲覧機能 タスクリスト"
 
 **目的**: 品質基準の最終確認とリグレッション検出
 
-- [ ] T034 型チェックと Lint: `pnpm typecheck 2>&1` & `pnpm lint 2>&1` でエラー 0件を確認
-- [ ] T035 全単体・統合テスト: `pnpm test:unit 2>&1` & `pnpm test:integration 2>&1` で全件 PASS 確認（カバレッジ 80% 以上）
-- [ ] T036 全件 E2E テスト（リグレッション検出）: `pnpm test:e2e 2>&1` で全 E2E PASS 確認（catalog-us1, catalog-us2, catalog-us3 を含む）
+- [x] T034 型チェックと Lint: `pnpm typecheck 2>&1` & `pnpm lint 2>&1` でエラー 0件を確認
+- [x] T035 全単体・統合テスト: `pnpm test:unit 2>&1` & `pnpm test:integration 2>&1` で全件 PASS 確認（カバレッジ 80% 以上）
+- [x] T036 全件 E2E テスト（リグレッション検出）: `pnpm test:e2e 2>&1` で全 E2E PASS 確認（catalog-us1, catalog-us2, catalog-us3 を含む）
 
 ---
 
