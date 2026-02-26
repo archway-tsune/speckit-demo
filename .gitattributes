@@ -1,0 +1,53 @@
+# Auto detect text files and normalize to LF
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Windows scripts keep CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# Release archive exclusions (git archive export-ignore)
+scripts/ export-ignore
+specs/ export-ignore
+pnpm-lock.yaml export-ignore
+.github/workflows/release.yml export-ignore
+.github/prompts/ export-ignore
+.claude/commands/speckit.analyze.md export-ignore
+.claude/commands/speckit.checklist.md export-ignore
+.claude/commands/speckit.clarify.md export-ignore
+.claude/commands/speckit.taskstoissues.md export-ignore
+.github/agents/speckit.analyze.agent.md export-ignore
+.github/agents/speckit.checklist.agent.md export-ignore
+.github/agents/speckit.clarify.agent.md export-ignore
+.github/agents/speckit.taskstoissues.agent.md export-ignore
+.specify/memory/ export-ignore
+.specify/scripts/ export-ignore
+.specify/templates/spec-template.md export-ignore
+.specify/templates/plan-template.md export-ignore
+.specify/templates/checklist-template.md export-ignore
+.specify/templates/agent-file-template.md export-ignore
+.specify/templates/constitution-template.md export-ignore
+CLAUDE.md export-ignore
+docs/SPECKIT_CUSTOM_CHANGES.md export-ignore
+docs/speckit-custom.patch export-ignore

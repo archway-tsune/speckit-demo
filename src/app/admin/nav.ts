@@ -1,0 +1,7 @@
+/** 管理者ナビゲーションリンク — ドメイン実装時にエントリを追加する */
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+export const adminNavLinks: NavLink[] = [];

@@ -1,0 +1,87 @@
+/** Orders ドメイン - ユースケース（authorize → validate → ビジネスロジック） */
+import type { Session } from '@/foundation/auth/session';
+import { authorize } from '@/foundation/auth/authorize';
+import { validate } from '@/foundation/validation/runtime';
+import {
+  GetOrdersInputSchema, GetOrderByIdInputSchema,
+  CreateOrderInputSchema, UpdateOrderStatusInputSchema,
+  ValidStatusTransitions,
+  type OrderItem, type OrderStatus,
+  type GetOrdersOutput, type GetOrderByIdOutput,
+  type CreateOrderOutput, type UpdateOrderStatusOutput,
+  type OrderRepository, type CartFetcher,
+} from '@/samples/contracts/orders';
+
+export type { OrderRepository, CartFetcher } from '@/samples/contracts/orders';
+
+export interface OrdersContext {
+  session: Session;
+  repository: OrderRepository;
+  cartFetcher: CartFetcher;
+}
+
+export class NotFoundError extends Error {
+  constructor(message: string) { super(message); this.name = 'NotFoundError'; }
+}
+
+export class EmptyCartError extends Error {
+  constructor() { super('カートが空です'); this.name = 'EmptyCartError'; }
+}
+
+export class InvalidStatusTransitionError extends Error {
+  constructor(currentStatus: OrderStatus, targetStatus: OrderStatus) {
+    super(`ステータスを ${currentStatus} から ${targetStatus} に変更できません`);
+    this.name = 'InvalidStatusTransitionError';
+  }
+}
+
+export async function getOrders(rawInput: unknown, context: OrdersContext): Promise<GetOrdersOutput> {
+  const input = validate(GetOrdersInputSchema, rawInput);
+  const page = input.page ?? 1;
+  const limit = input.limit ?? 20;
+  const userId = context.session.role === 'buyer' ? context.session.userId : input.userId;
+  const offset = (page - 1) * limit;
+  const [orders, total] = await Promise.all([
+    context.repository.findAll({ userId, status: input.status, offset, limit }),
+    context.repository.count({ userId, status: input.status }),
+  ]);
+  return { orders, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+}
+
+export async function getOrderById(rawInput: unknown, context: OrdersContext): Promise<GetOrderByIdOutput> {
+  const input = validate(GetOrderByIdInputSchema, rawInput);
+  const order = await context.repository.findById(input.id);
+  if (!order) throw new NotFoundError('注文が見つかりません');
+  if (context.session.role === 'buyer' && order.userId !== context.session.userId) {
+    throw new NotFoundError('注文が見つかりません');
+  }
+  return order;
+}
+
+export async function createOrder(rawInput: unknown, context: OrdersContext): Promise<CreateOrderOutput> {
+  authorize(context.session, 'buyer');
+  validate(CreateOrderInputSchema, rawInput);
+  const cart = await context.cartFetcher.getByUserId(context.session.userId);
+  if (!cart || cart.items.length === 0) throw new EmptyCartError();
+  const orderItems: OrderItem[] = cart.items.map((item) => ({
+    productId: item.productId, productName: item.productName,
+    price: item.price, quantity: item.quantity,
+  }));
+  const order = await context.repository.create({
+    userId: context.session.userId, items: orderItems,
+    totalAmount: cart.subtotal, status: 'pending',
+  });
+  await context.cartFetcher.clear(context.session.userId);
+  return order;
+}
+
+export async function updateOrderStatus(rawInput: unknown, context: OrdersContext): Promise<UpdateOrderStatusOutput> {
+  authorize(context.session, 'admin');
+  const input = validate(UpdateOrderStatusInputSchema, rawInput);
+  const order = await context.repository.findById(input.id);
+  if (!order) throw new NotFoundError('注文が見つかりません');
+  if (!ValidStatusTransitions[order.status].includes(input.status)) {
+    throw new InvalidStatusTransitionError(order.status, input.status);
+  }
+  return context.repository.updateStatus(input.id, input.status);
+}

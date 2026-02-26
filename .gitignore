@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Test
+coverage/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary
+*.tmp
+*.swp
+
+# ESLint
+.eslintcache
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Lock files (use pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
+# Distribution
+*.zip
+
+# Windows reserved device names (Win11 26200+ no longer treats nul as device)
+nul
