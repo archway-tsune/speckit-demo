@@ -37,9 +37,10 @@ export async function getProducts(rawInput: unknown, context: CatalogContext): P
   const limit = input.limit ?? 20;
   const status = context.session.role === 'buyer' ? 'published' : (input.status || undefined);
   const offset = (page - 1) * limit;
+  const query = input.q || undefined;
   const [products, total] = await Promise.all([
-    context.repository.findAll({ status, offset, limit }),
-    context.repository.count(status),
+    context.repository.findAll({ status, offset, limit, query }),
+    context.repository.count(status, query),
   ]);
   const totalPages = total === 0 ? 0 : Math.ceil(total / limit);
   return { products, pagination: { page, limit, total, totalPages } };

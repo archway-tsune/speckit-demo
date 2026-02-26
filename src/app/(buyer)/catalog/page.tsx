@@ -35,8 +35,6 @@ export default function CatalogPage() {
         error={error ?? undefined}
         onRetry={() => refetch()}
         loadingMessage="商品を読み込み中..."
-        emptyCheck={(d) => d.products.length === 0}
-        emptyMessage="商品がありません"
       >
         {(d) => (
           <ProductList

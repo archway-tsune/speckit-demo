@@ -145,31 +145,32 @@ description: "カタログ閲覧機能 タスクリスト"
 
 ⚠️ 禁止: 引数なし `toThrow()`、条件付きアサーション(`if→expect`)、`it.todo`/`skip`、テスト名「未実装」
 
-- [ ] T024 [P] [US3] `tests/unit/domains/catalog/us3/usecase.test.ts` を作成 (AC-1,2,3, FR-011,012,013)。テスト対象: `getProducts({ q: 'keyword' })`（name/description 部分一致フィルタ、0件時は空配列）。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` で FAIL 確認
+- [x] T024 [P] [US3] `tests/unit/domains/catalog/us3/usecase.test.ts` を作成 (AC-1,2,3, FR-011,012,013)。テスト対象: `getProducts({ q: 'keyword' })`（name/description 部分一致フィルタ、0件時は空配列）。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` で FAIL 確認
 
-- [ ] T025 [P] [US3] `tests/unit/domains/catalog/us3/ui.test.tsx` を作成 (AC-1,2,3, FR-011,012,013)。テスト対象: `ProductList` の `SearchBar` 連携（Enter でリフェッチ、0件時「該当する商品が見つかりませんでした」、クリアで全件戻り）。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` で FAIL 確認
+- [x] T025 [P] [US3] `tests/unit/domains/catalog/us3/ui.test.tsx` を作成 (AC-1,2,3, FR-011,012,013)。テスト対象: `ProductList` の `SearchBar` 連携（Enter でリフェッチ、0件時「該当する商品が見つかりませんでした」、クリアで全件戻り）。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` で FAIL 確認
 
-- [ ] T026 [P] [US3] `tests/integration/domains/catalog/us3/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProducts` ← q パラメータの入出力スキーマ整合、0件レスポンス。`pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` で FAIL 確認
+- [x] T026 [P] [US3] `tests/integration/domains/catalog/us3/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProducts` ← q パラメータの入出力スキーマ整合、0件レスポンス。`pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` で FAIL 確認
 
-- [ ] T027 [US3] `tests/e2e/catalog-us3.spec.ts` を作成 (AC-1〜3)。シナリオ: 検索バーに存在するキーワードを入力→Enter→絞り込み結果表示、存在しないキーワード→「該当する商品が見つかりませんでした」表示、クリアボタン→全件表示。`pnpm test:e2e --retries 0 tests/e2e/catalog-us3.spec.ts 2>&1` で FAIL 確認
+- [x] T027 [US3] `tests/e2e/catalog-us3.spec.ts` を作成 (AC-1〜3)。シナリオ: 検索バーに存在するキーワードを入力→Enter→絞り込み結果表示、存在しないキーワード→「該当する商品が見つかりませんでした」表示、クリアボタン→全件表示。`pnpm test:e2e --retries 0 tests/e2e/catalog-us3.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
 テストコード変更禁止。実装コードのみで全テストを PASS させる。
 
-- [ ] T028 [US3] `src/contracts/catalog.ts` の `GetProductsInputSchema` に `q: z.string().optional()` を追加
+- [x] T028 [US3] `src/contracts/catalog.ts` の `GetProductsInputSchema` に `q: z.string().optional()` を追加
 
-- [ ] T029 [US3] `src/infrastructure/repositories/product.ts` の `productRepository.findAll` に keyword フィルタを追加: `params.query` が指定された場合、`name` または `description` に対して大文字小文字を無視した部分一致フィルタ
+- [x] T029 [US3] `src/infrastructure/repositories/product.ts` の `productRepository.findAll` に keyword フィルタを追加: `params.query` が指定された場合、`name` または `description` に対して大文字小文字を無視した部分一致フィルタ
 
-- [ ] T030 [US3] `src/app/api/catalog/products/route.ts` の GET ハンドラで `q: searchParams.get('q') ?? undefined` を input に追加し `getProducts` へ渡す
+- [x] T030 [US3] `src/app/api/catalog/products/route.ts` の GET ハンドラで `q: searchParams.get('q') ?? undefined` を input に追加し `getProducts` へ渡す
 
-- [ ] T031 [US3] `src/domains/catalog/api/index.ts` の `getProducts` に `q` 対応を追加: バリデーション済み input の `q` を `repo.findAll({ ..., query: input.q })` へ渡す。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` で PASS 確認
+- [x] T031 [US3] `src/domains/catalog/api/index.ts` の `getProducts` に `q` 対応を追加: バリデーション済み input の `q` を `repo.findAll({ ..., query: input.q })` へ渡す。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` で PASS 確認
 
-- [ ] T032 [US3] `src/domains/catalog/ui/index.tsx` の `ProductList` に `SearchBar` を追加: `useState('')` で `q` 管理 → `useFetch` の params に `q` を含める（空文字は undefined 扱い） → `SearchBar` の `onSearch` で state 更新 → 0件時「該当する商品が見つかりませんでした」表示。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us3.spec.ts 2>&1` で PASS 確認
+- [x] T032 [US3] `src/domains/catalog/ui/index.tsx` の `ProductList` に `SearchBar` を追加: `useState('')` で `q` 管理 → `useFetch` の params に `q` を含める（空文字は undefined 扱い） → `SearchBar` の `onSearch` で state 更新 → 0件時「該当する商品が見つかりませんでした」表示。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us3.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T033 [US3] US3 で変更したコード（contracts, repository, route, `getProducts`, `ProductList`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us3.spec.ts 2>&1` で全 PASS 確認
+- [x] T033 [US3] US3 で変更したコード（contracts, repository, route, `getProducts`, `ProductList`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us3/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us3/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us3.spec.ts 2>&1` で全 PASS 確認
+<!-- T032 note: ProductList 検索 UI は US1 Green で実装済み。DataView emptyCheck を削除して ProductList の空状態表示に統一した -->
 
 **チェックポイント**: 全ユーザーストーリーが独立して動作・テスト通過済み
 

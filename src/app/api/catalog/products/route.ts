@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
       page: searchParams.get('page') || '1',
       limit: searchParams.get('limit') || '20',
       status: session ? (searchParams.get('status') || undefined) : 'published',
+      q: searchParams.get('q') ?? undefined,
     };
 
     const result = await getProducts(input, {

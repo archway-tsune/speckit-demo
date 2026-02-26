@@ -41,6 +41,8 @@ export const GetProductsInputSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   /** ステータスフィルタ（admin のみ draft/archived 指定可） */
   status: ProductStatusSchema.optional(),
+  /** キーワード検索（商品名・説明文の部分一致） */
+  q: z.string().optional(),
 });
 export type GetProductsInput = z.infer<typeof GetProductsInputSchema>;
 
