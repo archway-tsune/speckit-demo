@@ -112,25 +112,25 @@ description: "カタログ閲覧機能 タスクリスト"
 
 ⚠️ 禁止: 引数なし `toThrow()`、条件付きアサーション(`if→expect`)、`it.todo`/`skip`、テスト名「未実装」
 
-- [ ] T017 [P] [US2] `tests/unit/domains/catalog/us2/usecase.test.ts` を作成 (AC-1,2,3,4, FR-006,007,008,009,010)。テスト対象: `getProductById`（存在確認、buyer は published のみ、NotFoundError）。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` で FAIL 確認
+- [x] T017 [P] [US2] `tests/unit/domains/catalog/us2/usecase.test.ts` を作成 (AC-1,2,3,4, FR-006,007,008,009,010)。テスト対象: `getProductById`（存在確認、buyer は published のみ、NotFoundError）。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` で FAIL 確認
 
-- [ ] T018 [P] [US2] `tests/unit/domains/catalog/us2/ui.test.tsx` を作成 (AC-1,2,3,4, FR-007,008,009,010)。テスト対象: `ProductDetail`（全フィールド表示、stock>0でボタン有効、stock=0でボタン無効、imageUrl未設定でプレースホルダー、戻るボタン）。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` で FAIL 確認
+- [x] T018 [P] [US2] `tests/unit/domains/catalog/us2/ui.test.tsx` を作成 (AC-1,2,3,4, FR-007,008,009,010)。テスト対象: `ProductDetail`（全フィールド表示、stock>0でボタン有効、stock=0でボタン無効、imageUrl未設定でプレースホルダー、戻るボタン）。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` で FAIL 確認
 
-- [ ] T019 [P] [US2] `tests/integration/domains/catalog/us2/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProductById` ← 出力スキーマ整合、404 応答。`pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` で FAIL 確認
+- [x] T019 [P] [US2] `tests/integration/domains/catalog/us2/api.test.ts` を作成 (AC-1,2)。テスト対象: `getProductById` ← 出力スキーマ整合、404 応答。`pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` で FAIL 確認
 
-- [ ] T020 [US2] `tests/e2e/catalog-us2.spec.ts` を作成 (AC-1〜4)。シナリオ: 詳細ページで全情報表示、在庫切れ商品のボタン無効（data-testid or disabled 属性）、imageUrl なし商品でプレースホルダー表示（`data-testid="image-placeholder"`）、戻るボタンで一覧ページに遷移。`pnpm test:e2e --retries 0 tests/e2e/catalog-us2.spec.ts 2>&1` で FAIL 確認
+- [x] T020 [US2] `tests/e2e/catalog-us2.spec.ts` を作成 (AC-1〜4)。シナリオ: 詳細ページで全情報表示、在庫切れ商品のボタン無効（data-testid or disabled 属性）、imageUrl なし商品でプレースホルダー表示（`data-testid="image-placeholder"`）、戻るボタンで一覧ページに遷移。`pnpm test:e2e --retries 0 tests/e2e/catalog-us2.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
 テストコード変更禁止。実装コードのみで全テストを PASS させる。
 
-- [ ] T021 [US2] `src/domains/catalog/api/index.ts` の `getProductById` を実装: `validate(GetProductByIdInputSchema, rawInput)` → `repo.findById(id)` → 存在/ステータスチェック → 返却。サンプル参照。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` で PASS 確認
+- [x] T021 [US2] `src/domains/catalog/api/index.ts` の `getProductById` を実装: `validate(GetProductByIdInputSchema, rawInput)` → `repo.findById(id)` → 存在/ステータスチェック → 返却。サンプル参照。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` で PASS 確認
 
-- [ ] T022 [US2] `src/domains/catalog/ui/index.tsx` の `ProductDetail` を実装: `useFetch('/api/catalog/products/${id}')` → `ImagePlaceholder`（src=imageUrl）、商品名・価格・説明文・在庫数表示、stock=0 なら `<Button disabled>在庫切れ</Button>`、stock>0 なら `<Button>カートに追加（未実装）</Button>`（onClick なし）、`BackButton` で一覧へ。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us2.spec.ts 2>&1` で PASS 確認
+- [x] T022 [US2] `src/domains/catalog/ui/index.tsx` の `ProductDetail` を実装: `useFetch('/api/catalog/products/${id}')` → `ImagePlaceholder`（src=imageUrl）、商品名・価格・説明文・在庫数表示、stock=0 なら `<Button disabled>在庫切れ</Button>`、stock>0 なら `<Button>カートに追加（未実装）</Button>`（onClick なし）、`BackButton` で一覧へ。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us2.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T023 [US2] US2 で変更したコード（`getProductById`, `ProductDetail`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us2.spec.ts 2>&1` で全 PASS 確認
+- [x] T023 [US2] US2 で変更したコード（`getProductById`, `ProductDetail`）をリファクタリング。`pnpm test:unit:only tests/unit/domains/catalog/us2/ 2>&1` & `pnpm test:integration:only tests/integration/domains/catalog/us2/ 2>&1` & `pnpm test:e2e -x tests/e2e/catalog-us2.spec.ts 2>&1` で全 PASS 確認
 
 **チェックポイント**: US1 と US2 が両方独立して動作・テスト通過済み
 

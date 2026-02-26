@@ -10,6 +10,7 @@ import type { SessionData } from '@/foundation/auth/session';
 import { validate } from '@/foundation/validation/runtime';
 import {
   GetProductsInputSchema,
+  GetProductByIdInputSchema,
   type ProductRepository,
   type GetProductsOutput,
   type GetProductByIdOutput,
@@ -45,7 +46,13 @@ export async function getProducts(rawInput: unknown, context: CatalogContext): P
 }
 
 export async function getProductById(rawInput: unknown, context: CatalogContext): Promise<GetProductByIdOutput> {
-  throw new NotImplementedError('catalog', 'getProductById');
+  const input = validate(GetProductByIdInputSchema, rawInput);
+  const product = await context.repository.findById(input.id);
+  if (!product) throw new NotFoundError('商品が見つかりません');
+  if (context.session.role === 'buyer' && product.status !== 'published') {
+    throw new NotFoundError('商品が見つかりません');
+  }
+  return product;
 }
 
 export function createProduct(_rawInput: unknown, _context: CatalogContext): Promise<CreateProductOutput> {

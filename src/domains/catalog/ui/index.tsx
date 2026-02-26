@@ -17,8 +17,6 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { Button } from '@/components/form/Button';
 import { SearchBar } from '@/components/form/SearchBar';
 import { formatPrice } from '@/components/utils/format';
-import { NotImplementedError } from '@/foundation/errors/domain-errors';
-
 export interface ProductListProps {
   products: GetProductsOutput['products'];
   pagination: PaginationData;
@@ -93,5 +91,42 @@ export function ProductList({ products, pagination, onPageChange, onSearch, sear
 }
 
 export function ProductDetail({ product, onBack }: ProductDetailProps): ReactNode {
-  throw new NotImplementedError('catalog', 'ProductDetail');
+  return (
+    <div className="mx-auto max-w-4xl">
+      <BackButton label="一覧に戻る" onClick={onBack} />
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="aspect-square w-full overflow-hidden rounded-lg">
+          <ImagePlaceholder
+            src={product.imageUrl}
+            alt={product.name}
+            className="h-full w-full rounded-none object-cover"
+          />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-base-900">{product.name}</h1>
+          <p className="mt-4 text-3xl font-bold text-base-900">{formatPrice(product.price)}</p>
+          {product.description && (
+            <div className="mt-6">
+              <h2 className="text-sm font-medium text-base-900/60">商品説明</h2>
+              <p className="mt-2 text-base-900/80">{product.description}</p>
+            </div>
+          )}
+          <div className="mt-4 text-sm text-base-900/70">
+            在庫数: {product.stock}
+          </div>
+          <div className="mt-8">
+            {product.stock > 0 ? (
+              <Button className="w-full py-3 text-base">
+                カートに追加
+              </Button>
+            ) : (
+              <Button disabled className="w-full py-3 text-base">
+                在庫切れ
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
