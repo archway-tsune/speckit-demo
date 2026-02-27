@@ -14,14 +14,11 @@ import {
   type ProductRepository,
   type GetProductsOutput,
   type GetProductByIdOutput,
-  type CreateProductOutput,
-  type UpdateProductOutput,
-  type DeleteProductOutput,
 } from '@/contracts/catalog';
-import { NotImplementedError, NotFoundError } from '@/foundation/errors/domain-errors';
+import { NotFoundError } from '@/foundation/errors/domain-errors';
 
 // re-export for consumers
-export { NotImplementedError, NotFoundError };
+export { NotFoundError };
 
 /**
  * Catalog ドメインコンテキスト
@@ -56,14 +53,3 @@ export async function getProductById(rawInput: unknown, context: CatalogContext)
   return product;
 }
 
-export function createProduct(_rawInput: unknown, _context: CatalogContext): Promise<CreateProductOutput> {
-  throw new NotImplementedError('catalog', 'createProduct');
-}
-
-export function updateProduct(_rawInput: unknown, _context: CatalogContext): Promise<UpdateProductOutput> {
-  throw new NotImplementedError('catalog', 'updateProduct');
-}
-
-export function deleteProduct(_rawInput: unknown, _context: CatalogContext): Promise<DeleteProductOutput> {
-  throw new NotImplementedError('catalog', 'deleteProduct');
-}

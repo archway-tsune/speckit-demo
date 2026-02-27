@@ -1,8 +1,9 @@
 /**
- * 商品詳細・更新・削除API
+ * 商品詳細API（読み取り専用）
+ * admin CRUD は /api/admin/products を使用
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { getProductById, updateProduct, deleteProduct } from '@/domains/catalog/api';
+import { getProductById } from '@/domains/catalog/api';
 import { productRepository } from '@/infrastructure/repositories';
 import { getServerSession } from '@/infrastructure/auth';
 import { createGuestSession } from '@/infrastructure/auth';
@@ -11,7 +12,6 @@ import { createRouteHandler } from '@/templates/api/route-handler';
 import type { Session } from '@/foundation/auth/session';
 
 const publicHandler = createRouteHandler<Session>({ getSession: getServerSession, requireAuth: false });
-const authHandler = createRouteHandler<Session>({ getSession: getServerSession });
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -20,29 +20,6 @@ export async function GET(request: NextRequest, routeParams: Params) {
     const session = ctx.session as Session | null;
     const result = await getProductById({ id: ctx.params.id }, {
       session: session || createGuestSession(),
-      repository: productRepository,
-    });
-
-    return NextResponse.json(success(result));
-  }, routeParams);
-}
-
-export async function PUT(request: NextRequest, routeParams: Params) {
-  return authHandler.handler(request, async (req, ctx) => {
-    const body = await req.json();
-    const result = await updateProduct({ ...body, id: ctx.params.id }, {
-      session: ctx.session,
-      repository: productRepository,
-    });
-
-    return NextResponse.json(success(result));
-  }, routeParams);
-}
-
-export async function DELETE(request: NextRequest, routeParams: Params) {
-  return authHandler.handler(request, async (_req, ctx) => {
-    const result = await deleteProduct({ id: ctx.params.id }, {
-      session: ctx.session,
       repository: productRepository,
     });
 

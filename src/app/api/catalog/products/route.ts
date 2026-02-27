@@ -2,7 +2,7 @@
  * 商品一覧・登録API
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { getProducts, createProduct } from '@/domains/catalog/api';
+import { getProducts } from '@/domains/catalog/api';
 import { productRepository } from '@/infrastructure/repositories';
 import { getServerSession } from '@/infrastructure/auth';
 import { createGuestSession } from '@/infrastructure/auth';
@@ -11,7 +11,6 @@ import { createRouteHandler } from '@/templates/api/route-handler';
 import type { Session } from '@/foundation/auth/session';
 
 const publicHandler = createRouteHandler<Session>({ getSession: getServerSession, requireAuth: false });
-const authHandler = createRouteHandler<Session>({ getSession: getServerSession });
 
 export async function GET(request: NextRequest) {
   return publicHandler.handler(request, async (req, ctx) => {
@@ -33,14 +32,3 @@ export async function GET(request: NextRequest) {
   });
 }
 
-export async function POST(request: NextRequest) {
-  return authHandler.handler(request, async (req, ctx) => {
-    const body = await req.json();
-    const result = await createProduct(body, {
-      session: ctx.session,
-      repository: productRepository,
-    });
-
-    return NextResponse.json(success(result), { status: 201 });
-  });
-}
