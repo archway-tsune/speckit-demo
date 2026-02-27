@@ -5,8 +5,8 @@
  * 注意: Next.js開発モードではHMRによりモジュールが再読み込みされるため、
  * グローバル変数を使用してデータを保持しています。
  */
-import type { Product } from '@/contracts/catalog';
-import type { ProductRepository } from '@/contracts/catalog';
+import type { Product, ProductRepository } from '@/contracts/catalog';
+import type { ProductCommandRepository } from '@/contracts/products';
 import { generateId } from '@/infrastructure/id';
 import { createStore } from '@/infrastructure/store';
 
@@ -223,6 +223,36 @@ export const productRepository: ProductRepository = {
     return products.get(id) || null;
   },
 
+  async count(status, query) {
+    let items = Array.from(products.values());
+    if (status) {
+      items = items.filter((p) => p.status === status);
+    }
+    if (query) {
+      const q = query.toLowerCase();
+      items = items.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          (p.description?.toLowerCase().includes(q) ?? false)
+      );
+    }
+    return items.length;
+  },
+};
+
+export const productCommandRepository: ProductCommandRepository = {
+  async findAll(params) {
+    return productRepository.findAll(params);
+  },
+
+  async findById(id) {
+    return productRepository.findById(id);
+  },
+
+  async count(status, query) {
+    return productRepository.count(status, query);
+  },
+
   async create(data) {
     const now = new Date();
     const product: Product = {
@@ -242,39 +272,22 @@ export const productRepository: ProductRepository = {
 
   async update(id, data) {
     const existing = products.get(id);
-    if (!existing) {
-      throw new Error('Product not found');
-    }
-
+    if (!existing) throw new Error('Product not found');
     const updated: Product = {
       ...existing,
-      ...Object.fromEntries(
-        Object.entries(data).filter(([_, v]) => v !== undefined)
-      ),
+      ...Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined)),
       updatedAt: new Date(),
     };
     products.set(id, updated);
     return updated;
   },
 
-  async delete(id) {
-    products.delete(id);
+  async updateStatus(id, status) {
+    return productCommandRepository.update(id, { status });
   },
 
-  async count(status, query) {
-    let items = Array.from(products.values());
-    if (status) {
-      items = items.filter((p) => p.status === status);
-    }
-    if (query) {
-      const q = query.toLowerCase();
-      items = items.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          (p.description?.toLowerCase().includes(q) ?? false)
-      );
-    }
-    return items.length;
+  async delete(id) {
+    products.delete(id);
   },
 };
 

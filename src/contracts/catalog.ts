@@ -79,72 +79,8 @@ export const GetProductByIdOutputSchema = ProductSchema;
 export type GetProductByIdOutput = z.infer<typeof GetProductByIdOutputSchema>;
 
 // ─────────────────────────────────────────────────────────────────
-// 商品登録 (POST /api/catalog/products) - admin のみ
-// ─────────────────────────────────────────────────────────────────
-
-/**
- * 商品登録 - 入力
- */
-export const CreateProductInputSchema = z.object({
-  name: z.string().min(1, '商品名を入力してください').max(200, '商品名は200文字以内で入力してください'),
-  price: z.number().int().min(0, '価格は0以上で入力してください'),
-  description: z.string().max(2000, '商品説明は2000文字以内で入力してください').optional(),
-  imageUrl: z.string().url('有効なURLを入力してください').optional(),
-  status: ProductStatusSchema.default('draft'),
-});
-export type CreateProductInput = z.infer<typeof CreateProductInputSchema>;
-
-/**
- * 商品登録 - 出力
- */
-export const CreateProductOutputSchema = ProductSchema;
-export type CreateProductOutput = z.infer<typeof CreateProductOutputSchema>;
-
-// ─────────────────────────────────────────────────────────────────
-// 商品更新 (PUT /api/catalog/products/:id) - admin のみ
-// ─────────────────────────────────────────────────────────────────
-
-/**
- * 商品更新 - 入力
- */
-export const UpdateProductInputSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1).max(200).optional(),
-  price: z.number().int().min(0).optional(),
-  description: z.string().max(2000).optional(),
-  imageUrl: z.string().url().optional(),
-  status: ProductStatusSchema.optional(),
-});
-export type UpdateProductInput = z.infer<typeof UpdateProductInputSchema>;
-
-/**
- * 商品更新 - 出力
- */
-export const UpdateProductOutputSchema = ProductSchema;
-export type UpdateProductOutput = z.infer<typeof UpdateProductOutputSchema>;
-
-// ─────────────────────────────────────────────────────────────────
-// 商品削除 (DELETE /api/catalog/products/:id) - admin のみ
-// ─────────────────────────────────────────────────────────────────
-
-/**
- * 商品削除 - 入力
- */
-export const DeleteProductInputSchema = z.object({
-  id: z.string().uuid(),
-});
-export type DeleteProductInput = z.infer<typeof DeleteProductInputSchema>;
-
-/**
- * 商品削除 - 出力
- */
-export const DeleteProductOutputSchema = z.object({
-  success: z.literal(true),
-});
-export type DeleteProductOutput = z.infer<typeof DeleteProductOutputSchema>;
-
-// ─────────────────────────────────────────────────────────────────
-// リポジトリインターフェース
+// リポジトリインターフェース（読み取り専用 - catalog ドメイン用）
+// 書き込み操作は src/contracts/products.ts の ProductCommandRepository を使用
 // ─────────────────────────────────────────────────────────────────
 
 export interface ProductRepository {
@@ -155,13 +91,5 @@ export interface ProductRepository {
     query?: string;
   }): Promise<Product[]>;
   findById(id: string): Promise<Product | null>;
-  create(
-    data: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
-  ): Promise<Product>;
-  update(
-    id: string,
-    data: Partial<Omit<Product, 'id' | 'createdAt' | 'updatedAt'>>
-  ): Promise<Product>;
-  delete(id: string): Promise<void>;
   count(status?: Product['status'], query?: string): Promise<number>;
 }

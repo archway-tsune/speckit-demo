@@ -24,5 +24,10 @@ describe('ナビゲーション設定ファイル（本番）', () => {
       const { adminNavLinks } = await import('@/app/admin/nav');
       expect(adminNavLinks).toContainEqual({ href: '/admin/orders', label: '注文管理' });
     });
+
+    test('adminNavLinks が /admin/products エントリを含む', async () => {
+      const { adminNavLinks } = await import('@/app/admin/nav');
+      expect(adminNavLinks).toContainEqual({ href: '/admin/products', label: '商品管理' });
+    });
   });
 });

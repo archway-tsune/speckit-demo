@@ -6,12 +6,14 @@ import type { Cart } from '@/contracts/cart';
 import type { Order } from '@/contracts/orders';
 import { resetCartStore } from './cart';
 import { resetOrderStore } from './order';
+import { resetProductStore } from './product';
 import { createStore } from '@/infrastructure/store';
 
 /** 全てのインメモリストアをリセット */
 export function resetAllStores(): void {
   resetCartStore();
   resetOrderStore();
+  resetProductStore();
 }
 
 /** 指定ワーカーの buyer/admin ユーザーデータのみリセット（E2E 並列実行用） */

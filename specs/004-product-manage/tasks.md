@@ -13,7 +13,7 @@
 
 **目的**: 依存関係確認
 
-- [ ] T001 `pnpm install` で依存関係を確認。`pnpm build` が通ることを確認（型エラーがあれば記録）
+- [x] T001 `pnpm install` で依存関係を確認。`pnpm build` が通ることを確認（型エラーがあれば記録）
 
 ---
 
@@ -23,15 +23,15 @@
 
 **⚠️ CRITICAL**: このフェーズが完了するまで US 実装を開始してはならない
 
-- [ ] T002 `src/contracts/catalog.ts` をリファクタリング（FR-001）: `ProductRepository` インターフェースから `create()` / `update()` / `delete()` を削除（読み取り専用化）。`CreateProductInputSchema` / `UpdateProductInputSchema` / `DeleteProductInputSchema` とその Output 型も削除
+- [x] T002 `src/contracts/catalog.ts` をリファクタリング（FR-001）: `ProductRepository` インターフェースから `create()` / `update()` / `delete()` を削除（読み取り専用化）。`CreateProductInputSchema` / `UpdateProductInputSchema` / `DeleteProductInputSchema` とその Output 型も削除
 
-- [ ] T003 [P] `src/contracts/products.ts` を新規作成（FR-001, FR-006〜FR-008, FR-015）: `GetAdminProductsInputSchema` / `OutputSchema`、`CreateProductInputSchema` / `OutputSchema`、`UpdateProductInputSchema` / `OutputSchema`、`UpdateProductStatusInputSchema` / `OutputSchema`、`DeleteProductInputSchema` / `OutputSchema`、`ProductCommandRepository` インターフェース（findAll・findById・count・create・update・updateStatus・delete）を定義。`ProductSchema` / `ProductStatus` は `@/contracts/catalog` から re-import
+- [x] T003 [P] `src/contracts/products.ts` を新規作成（FR-001, FR-006〜FR-008, FR-015）: `GetAdminProductsInputSchema` / `OutputSchema`、`CreateProductInputSchema` / `OutputSchema`、`UpdateProductInputSchema` / `OutputSchema`、`UpdateProductStatusInputSchema` / `OutputSchema`、`DeleteProductInputSchema` / `OutputSchema`、`ProductCommandRepository` インターフェース（findAll・findById・count・create・update・updateStatus・delete）を定義。`ProductSchema` / `ProductStatus` は `@/contracts/catalog` から re-import
 
-- [ ] T004 `src/infrastructure/repositories/product.ts` を更新（FR-001）: `ProductCommandRepository`（`@/contracts/products` から import）を実装した `productCommandRepository` を追加エクスポート。`updateStatus(id, status)` メソッドを追加（`update()` の薄いラッパー）。既存 `productRepository` の型を read-only `ProductRepository` に変更
+- [x] T004 `src/infrastructure/repositories/product.ts` を更新（FR-001）: `ProductCommandRepository`（`@/contracts/products` から import）を実装した `productCommandRepository` を追加エクスポート。`updateStatus(id, status)` メソッドを追加（`update()` の薄いラッパー）。既存 `productRepository` の型を read-only `ProductRepository` に変更
 
-- [ ] T005 `src/infrastructure/repositories/index.ts` に `productCommandRepository` を追加エクスポート（T004 依存）
+- [x] T005 `src/infrastructure/repositories/index.ts` に `productCommandRepository` を追加エクスポート（T004 依存）
 
-- [ ] T006 `src/domains/catalog/api/index.ts` から `createProduct` / `updateProduct` / `deleteProduct` スタブと関連 import（`CreateProductOutput` 等）を削除（T002 依存）
+- [x] T006 `src/domains/catalog/api/index.ts` から `createProduct` / `updateProduct` / `deleteProduct` スタブと関連 import（`CreateProductOutput` 等）を削除（T002 依存）
 
 **チェックポイント**: `pnpm build` が catalog 関連のエラーなしで通ること（型エラーは次フェーズで解消）
 
@@ -41,23 +41,23 @@
 
 **目的**: 全 US 分のスタブを一括生成。Red テスト作成の前提条件。
 
-- [ ] T007 前準備: `src/components/index.ts`・`src/templates/index.ts`・`src/app/(samples)/sample/api/` 配下の catalog 関連サンプル Route を Read。フック（`useFetch`・`useFormSubmit`）のソースと使用例も Read。サンプルドメイン UI（`src/samples/domains/catalog/ui/`）を Read してパターンを把握
+- [x] T007 前準備: `src/components/index.ts`・`src/templates/index.ts`・`src/app/(samples)/sample/api/` 配下の catalog 関連サンプル Route を Read。フック（`useFetch`・`useFormSubmit`）のソースと使用例も Read。サンプルドメイン UI（`src/samples/domains/catalog/ui/`）を Read してパターンを把握
 
-- [ ] T008 [P] `src/app/api/admin/products/route.ts` を新規作成: T007 で読んだサンプルに従い `createRouteHandler()` で GET（getAdminProducts スタブ）+ POST（createProduct スタブ）を実装。両ハンドラは `NotImplementedError` を throw
+- [x] T008 [P] `src/app/api/admin/products/route.ts` を新規作成: T007 で読んだサンプルに従い `createRouteHandler()` で GET（getAdminProducts スタブ）+ POST（createProduct スタブ）を実装。両ハンドラは `NotImplementedError` を throw
 
-- [ ] T009 [P] `src/app/api/admin/products/[id]/route.ts` を新規作成: `createRouteHandler()` で GET（getAdminProductById スタブ）+ PUT（updateProduct スタブ）+ DELETE（deleteProduct スタブ）。`NotImplementedError` を throw
+- [x] T009 [P] `src/app/api/admin/products/[id]/route.ts` を新規作成: `createRouteHandler()` で GET（getAdminProductById スタブ）+ PUT（updateProduct スタブ）+ DELETE（deleteProduct スタブ）。`NotImplementedError` を throw
 
-- [ ] T010 [P] `src/app/api/admin/products/[id]/status/route.ts` を新規作成: `createRouteHandler()` で PATCH（updateProductStatus スタブ）。`NotImplementedError` を throw
+- [x] T010 [P] `src/app/api/admin/products/[id]/status/route.ts` を新規作成: `createRouteHandler()` で PATCH（updateProductStatus スタブ）。`NotImplementedError` を throw
 
-- [ ] T011 [P] `src/app/api/catalog/products/route.ts` から POST ハンドラを削除（CQRS 分離）。GET のみ残す。`createProduct` import も削除
+- [x] T011 [P] `src/app/api/catalog/products/route.ts` から POST ハンドラを削除（CQRS 分離）。GET のみ残す。`createProduct` import も削除
 
-- [ ] T012 [P] `src/app/api/catalog/products/[id]/route.ts` から PUT・DELETE ハンドラを削除。GET のみ残す
+- [x] T012 [P] `src/app/api/catalog/products/[id]/route.ts` から PUT・DELETE ハンドラを削除。GET のみ残す
 
-- [ ] T013 `src/domains/products/api/index.ts` + `src/domains/products/ui/index.tsx` を新規作成（T007 依存）:
+- [x] T013 `src/domains/products/api/index.ts` + `src/domains/products/ui/index.tsx` を新規作成（T007 依存）:
   - `api/index.ts`: `ProductsContext`（session + repository: ProductCommandRepository）を定義。`getAdminProducts`・`getAdminProductById`・`createProduct`・`updateProduct`・`updateProductStatus`・`deleteProduct` を全て `throw new NotImplementedError()` で実装。先頭に `// @see barrel: [T007 で読んだ @/components の全エクスポートをそのまま列挙]` コメントを付与
   - `ui/index.tsx`: `ProductTable`・`ProductForm`（JSX 返却禁止、`throw new NotImplementedError()` のみ）。Props 型は `@/contracts/products` から導出。先頭に `// @see barrel:` コメント
 
-- [ ] T014 [P] admin products page.tsx × 3 をコンテナスタブに更新:
+- [x] T014 [P] admin products page.tsx × 3 をコンテナスタブに更新:
   - `src/app/admin/products/page.tsx`: `<div className="mx-auto max-w-7xl ..."><ProductTable ... /></div>` 形式。`useFetch`・`DataView` パターン。`ProductTable` import
   - `src/app/admin/products/new/page.tsx`: `<div ...><ProductForm ... /></div>` 形式
   - `src/app/admin/products/[id]/edit/page.tsx`: `<div ...><ProductForm ... /></div>` 形式
@@ -76,27 +76,27 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T015 [P] [US1] `tests/unit/domains/products/us1/api.test.ts` を作成（AC-5, AC-6, FR-001〜FR-005）。テスト対象: `getAdminProducts`。admin は全ステータス取得・ページネーション・ステータスフィルタ、buyer は ForbiddenError。`pnpm test:unit:only tests/unit/domains/products/us1/ 2>&1` で FAIL 確認
+- [x] T015 [P] [US1] `tests/unit/domains/products/us1/api.test.ts` を作成（AC-5, AC-6, FR-001〜FR-005）。テスト対象: `getAdminProducts`。admin は全ステータス取得・ページネーション・ステータスフィルタ、buyer は ForbiddenError。`pnpm test:unit:only tests/unit/domains/products/us1/ 2>&1` で FAIL 確認
 
-- [ ] T016 [P] [US1] `tests/integration/domains/products/us1/api.test.ts` を作成（FR-004, FR-005）。`GetAdminProductsOutputSchema.parse(result)` 契約検証。draft 商品が含まれることを確認。`pnpm test:integration:only tests/integration/domains/products/us1/ 2>&1` で FAIL 確認
+- [x] T016 [P] [US1] `tests/integration/domains/products/us1/api.test.ts` を作成（FR-004, FR-005）。`GetAdminProductsOutputSchema.parse(result)` 契約検証。draft 商品が含まれることを確認。`pnpm test:integration:only tests/integration/domains/products/us1/ 2>&1` で FAIL 確認
 
-- [ ] T017 [US1] `tests/e2e/products-us1.spec.ts` を作成（AC-1, AC-2, AC-4, AC-5, AC-6）。`src/app/admin/products/page.tsx` と UI コンポーネントのソースを Read して testid を確認してから記述。`page.goto` 後に `waitForLoadState('networkidle')` → 即判定 `{ timeout: 0 }`。`pnpm test:e2e --retries 0 tests/e2e/products-us1.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
+- [x] T017 [US1] `tests/e2e/products-us1.spec.ts` を作成（AC-1, AC-2, AC-4, AC-5, AC-6）。`src/app/admin/products/page.tsx` と UI コンポーネントのソースを Read して testid を確認してから記述。`page.goto` 後に `waitForLoadState('networkidle')` → 即判定 `{ timeout: 0 }`。`pnpm test:e2e --retries 0 tests/e2e/products-us1.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
 
 ### Green
 
-- [ ] T018 [US1] `src/domains/products/api/index.ts` の `getAdminProducts` を実装（FR-001〜FR-005）: `authorize(admin)` → validate → findAll（全ステータス）→ count → pagination 計算。`pnpm test:unit:only tests/unit/domains/products/us1/ 2>&1` で PASS 確認
+- [x] T018 [US1] `src/domains/products/api/index.ts` の `getAdminProducts` を実装（FR-001〜FR-005）: `authorize(admin)` → validate → findAll（全ステータス）→ count → pagination 計算。`pnpm test:unit:only tests/unit/domains/products/us1/ 2>&1` で PASS 確認
 
-- [ ] T019 [US1] `src/app/api/admin/products/route.ts` の GET ハンドラを実装（FR-004, FR-005）: `productCommandRepository` + `getAdminProducts` を呼ぶ。`pnpm test:integration:only tests/integration/domains/products/us1/ 2>&1` で PASS 確認
+- [x] T019 [US1] `src/app/api/admin/products/route.ts` の GET ハンドラを実装（FR-004, FR-005）: `productCommandRepository` + `getAdminProducts` を呼ぶ。`pnpm test:integration:only tests/integration/domains/products/us1/ 2>&1` で PASS 確認
 
-- [ ] T020 [US1] `src/domains/products/ui/index.tsx` の `ProductTable` を実装（FR-004, FR-005, SC-006）: 商品名・価格・在庫数・ステータスバッジ・編集リンク・削除ボタン・ステータス select プレースホルダーを含む table。`@/components` の `StatusBadge`・`Pagination`・`Button` を使用。props: products, pagination, onEdit, onDelete, onStatusChange, onPageChange
+- [x] T020 [US1] `src/domains/products/ui/index.tsx` の `ProductTable` を実装（FR-004, FR-005, SC-006）: 商品名・価格・在庫数・ステータスバッジ・編集リンク・削除ボタン・ステータス select プレースホルダーを含む table。`@/components` の `StatusBadge`・`Pagination`・`Button` を使用。props: products, pagination, onEdit, onDelete, onStatusChange, onPageChange
 
-- [ ] T021 [US1] `src/app/admin/products/page.tsx` を実装（AC-1, AC-2, AC-4）: `useFetch('/api/admin/products', ...)` + `DataView` + `ProductTable`。「新規登録」ボタンを含む。`pnpm test:e2e -x tests/e2e/products-us1.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
+- [x] T021 [US1] `src/app/admin/products/page.tsx` を実装（AC-1, AC-2, AC-4）: `useFetch('/api/admin/products', ...)` + `DataView` + `ProductTable`。「新規登録」ボタンを含む。`pnpm test:e2e -x tests/e2e/products-us1.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
 
-- [ ] T022 [US1] `src/app/admin/nav.ts` に `{ href: '/admin/products', label: '商品管理' }` を追加
+- [x] T022 [US1] `src/app/admin/nav.ts` に `{ href: '/admin/products', label: '商品管理' }` を追加
 
 ### Refactor
 
-- [ ] T023 [US1] US1 で変更したコードをレビュー・リファクタリング。`tests/unit/app/nav-config.test.ts` に admin products エントリのアサーションを追加（`toContainEqual({ href: '/admin/products', label: '商品管理' })`）。`pnpm test:unit:only tests/unit/domains/products/us1/ && pnpm test:unit:only tests/unit/app/ 2>&1` で PASS 確認
+- [x] T023 [US1] US1 で変更したコードをレビュー・リファクタリング。`tests/unit/app/nav-config.test.ts` に admin products エントリのアサーションを追加（`toContainEqual({ href: '/admin/products', label: '商品管理' })`）。`pnpm test:unit:only tests/unit/domains/products/us1/ && pnpm test:unit:only tests/unit/app/ 2>&1` で PASS 確認
 
 ---
 
@@ -110,25 +110,25 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T024 [P] [US2] `tests/unit/domains/products/us2/api.test.ts` を作成（AC-1〜AC-6, FR-006〜FR-008）。テスト対象: `createProduct`。正常登録で status='draft'、名前空欄/201文字/価格なし/負の価格/無効URL のバリデーションエラー。`pnpm test:unit:only tests/unit/domains/products/us2/ 2>&1` で FAIL 確認
+- [x] T024 [P] [US2] `tests/unit/domains/products/us2/api.test.ts` を作成（AC-1〜AC-6, FR-006〜FR-008）。テスト対象: `createProduct`。正常登録で status='draft'、名前空欄/201文字/価格なし/負の価格/無効URL のバリデーションエラー。`pnpm test:unit:only tests/unit/domains/products/us2/ 2>&1` で FAIL 確認
 
-- [ ] T025 [P] [US2] `tests/integration/domains/products/us2/api.test.ts` を作成（FR-008）。`ProductSchema.parse(result)`、status が 'draft' であること。`pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で FAIL 確認
+- [x] T025 [P] [US2] `tests/integration/domains/products/us2/api.test.ts` を作成（FR-008）。`ProductSchema.parse(result)`、status が 'draft' であること。`pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で FAIL 確認
 
-- [ ] T026 [US2] `tests/e2e/products-us2.spec.ts` を作成（AC-1, AC-2, AC-7）。フォームソースを Read して input name / testid を確認してから記述。登録成功フロー + 名前空欄バリデーション + キャンセル。`pnpm test:e2e --retries 0 tests/e2e/products-us2.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
+- [x] T026 [US2] `tests/e2e/products-us2.spec.ts` を作成（AC-1, AC-2, AC-7）。フォームソースを Read して input name / testid を確認してから記述。登録成功フロー + 名前空欄バリデーション + キャンセル。`pnpm test:e2e --retries 0 tests/e2e/products-us2.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
 
 ### Green
 
-- [ ] T027 [US2] `src/domains/products/api/index.ts` の `createProduct` を実装（FR-006〜FR-008）: `authorize(admin)` → validate → `repository.create({ ...data, status: 'draft', stock: data.stock ?? 0 })`。`pnpm test:unit:only tests/unit/domains/products/us2/ 2>&1` で PASS 確認
+- [x] T027 [US2] `src/domains/products/api/index.ts` の `createProduct` を実装（FR-006〜FR-008）: `authorize(admin)` → validate → `repository.create({ ...data, status: 'draft', stock: data.stock ?? 0 })`。`pnpm test:unit:only tests/unit/domains/products/us2/ 2>&1` で PASS 確認
 
-- [ ] T028 [US2] `src/app/api/admin/products/route.ts` の POST ハンドラを実装（FR-008, FR-009）: 201 レスポンス。`pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で PASS 確認
+- [x] T028 [US2] `src/app/api/admin/products/route.ts` の POST ハンドラを実装（FR-008, FR-009）: 201 レスポンス。`pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で PASS 確認
 
-- [ ] T029 [US2] `src/domains/products/ui/index.tsx` の `ProductForm` を実装（FR-006〜FR-007, FR-009, FR-016）: 商品名・価格（必須）・説明・画像URL・在庫数（任意）。`@/components` の `FormField`・`TextInput`・`TextArea`・`Button`・`useFormSubmit` を使用。props: initialValues?, onSubmit(data), onCancel, isSubmitting?
+- [x] T029 [US2] `src/domains/products/ui/index.tsx` の `ProductForm` を実装（FR-006〜FR-007, FR-009, FR-016）: 商品名・価格（必須）・説明・画像URL・在庫数（任意）。`@/components` の `FormField`・`TextInput`・`TextArea`・`Button`・`useFormSubmit` を使用。props: initialValues?, onSubmit(data), onCancel, isSubmitting?
 
-- [ ] T030 [US2] `src/app/admin/products/new/page.tsx` を実装（AC-1, AC-7）: `ProductForm` を呼び出し、onSubmit で POST /api/admin/products、成功後 `/admin/products` に遷移。`pnpm test:e2e -x tests/e2e/products-us2.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
+- [x] T030 [US2] `src/app/admin/products/new/page.tsx` を実装（AC-1, AC-7）: `ProductForm` を呼び出し、onSubmit で POST /api/admin/products、成功後 `/admin/products` に遷移。`pnpm test:e2e -x tests/e2e/products-us2.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
 
 ### Refactor
 
-- [ ] T031 [US2] US2 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us2/ && pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で PASS 確認
+- [x] T031 [US2] US2 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us2/ && pnpm test:integration:only tests/integration/domains/products/us2/ 2>&1` で PASS 確認
 
 ---
 
@@ -142,23 +142,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T032 [P] [US3] `tests/unit/domains/products/us3/api.test.ts` を作成（AC-1〜AC-5, FR-010〜FR-012）。テスト対象: `getAdminProductById`・`updateProduct`。プリロード（全フィールド返却）、部分更新（説明のみ変更で他フィールド不変）、存在しない ID で NotFoundError。`pnpm test:unit:only tests/unit/domains/products/us3/ 2>&1` で FAIL 確認
+- [x] T032 [P] [US3] `tests/unit/domains/products/us3/api.test.ts` を作成（AC-1〜AC-5, FR-010〜FR-012）。テスト対象: `getAdminProductById`・`updateProduct`。プリロード（全フィールド返却）、部分更新（説明のみ変更で他フィールド不変）、存在しない ID で NotFoundError。`pnpm test:unit:only tests/unit/domains/products/us3/ 2>&1` で FAIL 確認
 
-- [ ] T033 [P] [US3] `tests/integration/domains/products/us3/api.test.ts` を作成（FR-010〜FR-011）。`ProductSchema.parse(result)` 契約検証、部分更新の確認。`pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で FAIL 確認
+- [x] T033 [P] [US3] `tests/integration/domains/products/us3/api.test.ts` を作成（FR-010〜FR-011）。`ProductSchema.parse(result)` 契約検証、部分更新の確認。`pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で FAIL 確認
 
-- [ ] T034 [US3] `tests/e2e/products-us3.spec.ts` を作成（AC-1, AC-2, AC-5）。編集フォームのプリロード確認 + 保存後の反映 + キャンセル。ソースを Read して testid を確認してから記述。`pnpm test:e2e --retries 0 tests/e2e/products-us3.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
+- [x] T034 [US3] `tests/e2e/products-us3.spec.ts` を作成（AC-1, AC-2, AC-5）。編集フォームのプリロード確認 + 保存後の反映 + キャンセル。ソースを Read して testid を確認してから記述。`pnpm test:e2e --retries 0 tests/e2e/products-us3.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
 
 ### Green
 
-- [ ] T035 [US3] `src/domains/products/api/index.ts` の `getAdminProductById`・`updateProduct` を実装（FR-010〜FR-012）: `getAdminProductById`: authorize(admin) → findById → 404 on null。`updateProduct`: authorize(admin) → validate → findById → 404 on null → repository.update（指定フィールドのみ）。`pnpm test:unit:only tests/unit/domains/products/us3/ 2>&1` で PASS 確認
+- [x] T035 [US3] `src/domains/products/api/index.ts` の `getAdminProductById`・`updateProduct` を実装（FR-010〜FR-012）: `getAdminProductById`: authorize(admin) → findById → 404 on null。`updateProduct`: authorize(admin) → validate → findById → 404 on null → repository.update（指定フィールドのみ）。`pnpm test:unit:only tests/unit/domains/products/us3/ 2>&1` で PASS 確認
 
-- [ ] T036 [US3] `src/app/api/admin/products/[id]/route.ts` の GET・PUT ハンドラを実装（FR-010〜FR-012）。`pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で PASS 確認
+- [x] T036 [US3] `src/app/api/admin/products/[id]/route.ts` の GET・PUT ハンドラを実装（FR-010〜FR-012）。`pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で PASS 確認
 
-- [ ] T037 [US3] `src/app/admin/products/[id]/edit/page.tsx` を実装（AC-1, AC-2, AC-5, FR-010, FR-016）: `useFetch('/api/admin/products/[id]', ...)` でプリロード → `ProductForm` に `initialValues` として渡す。onSubmit で PUT /api/admin/products/[id]、成功後 `/admin/products` に遷移。`pnpm test:e2e -x tests/e2e/products-us3.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
+- [x] T037 [US3] `src/app/admin/products/[id]/edit/page.tsx` を実装（AC-1, AC-2, AC-5, FR-010, FR-016）: `useFetch('/api/admin/products/[id]', ...)` でプリロード → `ProductForm` に `initialValues` として渡す。onSubmit で PUT /api/admin/products/[id]、成功後 `/admin/products` に遷移。`pnpm test:e2e -x tests/e2e/products-us3.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
 
 ### Refactor
 
-- [ ] T038 [US3] US3 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us3/ && pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で PASS 確認
+- [x] T038 [US3] US3 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us3/ && pnpm test:integration:only tests/integration/domains/products/us3/ 2>&1` で PASS 確認
 
 ---
 
@@ -172,23 +172,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T039 [P] [US4] `tests/unit/domains/products/us4/api.test.ts` を作成（AC-1〜AC-3, FR-014〜FR-015）。テスト対象: `updateProductStatus`。admin による全ステータス遷移（draft→published、published→archived、archived→draft）、buyer は ForbiddenError。`pnpm test:unit:only tests/unit/domains/products/us4/ 2>&1` で FAIL 確認
+- [x] T039 [P] [US4] `tests/unit/domains/products/us4/api.test.ts` を作成（AC-1〜AC-3, FR-014〜FR-015）。テスト対象: `updateProductStatus`。admin による全ステータス遷移（draft→published、published→archived、archived→draft）、buyer は ForbiddenError。`pnpm test:unit:only tests/unit/domains/products/us4/ 2>&1` で FAIL 確認
 
-- [ ] T040 [P] [US4] `tests/integration/domains/products/us4/api.test.ts` を作成（FR-014〜FR-015）。`ProductSchema.parse(result)`、status が指定値に更新されていることを確認。`pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で FAIL 確認
+- [x] T040 [P] [US4] `tests/integration/domains/products/us4/api.test.ts` を作成（FR-014〜FR-015）。`ProductSchema.parse(result)`、status が指定値に更新されていることを確認。`pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で FAIL 確認
 
-- [ ] T041 [US4] `tests/e2e/products-us4.spec.ts` を作成（AC-1, AC-2）。ProductTable の status select の testid を Read して確認してから記述。select 変更後の即時更新（ページリロードなし）。`pnpm test:e2e --retries 0 tests/e2e/products-us4.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
+- [x] T041 [US4] `tests/e2e/products-us4.spec.ts` を作成（AC-1, AC-2）。ProductTable の status select の testid を Read して確認してから記述。select 変更後の即時更新（ページリロードなし）。`pnpm test:e2e --retries 0 tests/e2e/products-us4.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
 
 ### Green
 
-- [ ] T042 [US4] `src/domains/products/api/index.ts` の `updateProductStatus` を実装（FR-014〜FR-015）: `authorize(admin)` → validate → findById → 404 on null → `repository.updateStatus(id, status)`。ProductStatusSchema バリデーションのみ（遷移制限なし）。`pnpm test:unit:only tests/unit/domains/products/us4/ 2>&1` で PASS 確認
+- [x] T042 [US4] `src/domains/products/api/index.ts` の `updateProductStatus` を実装（FR-014〜FR-015）: `authorize(admin)` → validate → findById → 404 on null → `repository.updateStatus(id, status)`。ProductStatusSchema バリデーションのみ（遷移制限なし）。`pnpm test:unit:only tests/unit/domains/products/us4/ 2>&1` で PASS 確認
 
-- [ ] T043 [US4] `src/app/api/admin/products/[id]/status/route.ts` の PATCH ハンドラを実装（FR-014）。`pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で PASS 確認
+- [x] T043 [US4] `src/app/api/admin/products/[id]/status/route.ts` の PATCH ハンドラを実装（FR-014）。`pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で PASS 確認
 
-- [ ] T044 [US4] `src/domains/products/ui/index.tsx` の `ProductTable` を更新（FR-014, SC-002）: 各行の status cell を `<select>` に変更。onChange で `PATCH /api/admin/products/[id]/status` を fetch し、成功後に `onStatusChange(id, newStatus)` コールバックを呼ぶ（または page.tsx の `refetch()` を呼ぶ）。`pnpm test:e2e -x tests/e2e/products-us4.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
+- [x] T044 [US4] `src/domains/products/ui/index.tsx` の `ProductTable` を更新（FR-014, SC-002）: 各行の status cell を `<select>` に変更。onChange で `PATCH /api/admin/products/[id]/status` を fetch し、成功後に `onStatusChange(id, newStatus)` コールバックを呼ぶ（または page.tsx の `refetch()` を呼ぶ）。`pnpm test:e2e -x tests/e2e/products-us4.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
 
 ### Refactor
 
-- [ ] T045 [US4] US4 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us4/ && pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で PASS 確認
+- [x] T045 [US4] US4 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us4/ && pnpm test:integration:only tests/integration/domains/products/us4/ 2>&1` で PASS 確認
 
 ---
 
@@ -202,23 +202,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T046 [P] [US5] `tests/unit/domains/products/us5/api.test.ts` を作成（AC-1〜AC-3, FR-013）。テスト対象: `deleteProduct`。admin による削除成功（{success: true}）、buyer は ForbiddenError、存在しない ID は NotFoundError。`pnpm test:unit:only tests/unit/domains/products/us5/ 2>&1` で FAIL 確認
+- [x] T046 [P] [US5] `tests/unit/domains/products/us5/api.test.ts` を作成（AC-1〜AC-3, FR-013）。テスト対象: `deleteProduct`。admin による削除成功（{success: true}）、buyer は ForbiddenError、存在しない ID は NotFoundError。`pnpm test:unit:only tests/unit/domains/products/us5/ 2>&1` で FAIL 確認
 
-- [ ] T047 [P] [US5] `tests/integration/domains/products/us5/api.test.ts` を作成（FR-013）。`DeleteProductOutputSchema.parse(result)` 契約検証、削除後に findById が null を返すことを確認。`pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で FAIL 確認
+- [x] T047 [P] [US5] `tests/integration/domains/products/us5/api.test.ts` を作成（FR-013）。`DeleteProductOutputSchema.parse(result)` 契約検証、削除後に findById が null を返すことを確認。`pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で FAIL 確認
 
-- [ ] T048 [US5] `tests/e2e/products-us5.spec.ts` を作成（AC-1, AC-2, AC-3, FR-013）。`ConfirmDialog` のソースを Read して dialog の testid・ボタンを確認してから記述。削除ボタン → ダイアログ表示 → 確認 → 一覧から消える + キャンセルフロー。`pnpm test:e2e --retries 0 tests/e2e/products-us5.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
+- [x] T048 [US5] `tests/e2e/products-us5.spec.ts` を作成（AC-1, AC-2, AC-3, FR-013）。`ConfirmDialog` のソースを Read して dialog の testid・ボタンを確認してから記述。削除ボタン → ダイアログ表示 → 確認 → 一覧から消える + キャンセルフロー。`pnpm test:e2e --retries 0 tests/e2e/products-us5.spec.ts 2>&1` で FAIL 確認（Bash timeout: 120000ms）
 
 ### Green
 
-- [ ] T049 [US5] `src/domains/products/api/index.ts` の `deleteProduct` を実装（FR-013）: `authorize(admin)` → validate → findById → 404 on null → `repository.delete(id)` → `{ success: true }`。`pnpm test:unit:only tests/unit/domains/products/us5/ 2>&1` で PASS 確認
+- [x] T049 [US5] `src/domains/products/api/index.ts` の `deleteProduct` を実装（FR-013）: `authorize(admin)` → validate → findById → 404 on null → `repository.delete(id)` → `{ success: true }`。`pnpm test:unit:only tests/unit/domains/products/us5/ 2>&1` で PASS 確認
 
-- [ ] T050 [US5] `src/app/api/admin/products/[id]/route.ts` の DELETE ハンドラを実装（FR-013）。`pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で PASS 確認
+- [x] T050 [US5] `src/app/api/admin/products/[id]/route.ts` の DELETE ハンドラを実装（FR-013）。`pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で PASS 確認
 
-- [ ] T051 [US5] `src/domains/products/ui/index.tsx` の `ProductTable` を更新（FR-013, SC-003）: 削除ボタンクリック → `@/components` の `ConfirmDialog` を表示（useState で isOpen・targetId 管理）。確認後に `DELETE /api/admin/products/[id]` を fetch し `onDelete(id)` コールバック呼び出し。`pnpm test:e2e -x tests/e2e/products-us5.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
+- [x] T051 [US5] `src/domains/products/ui/index.tsx` の `ProductTable` を更新（FR-013, SC-003）: 削除ボタンクリック → `@/components` の `ConfirmDialog` を表示（useState で isOpen・targetId 管理）。確認後に `DELETE /api/admin/products/[id]` を fetch し `onDelete(id)` コールバック呼び出し。`pnpm test:e2e -x tests/e2e/products-us5.spec.ts 2>&1` で PASS 確認（Bash timeout: 120000ms）
 
 ### Refactor
 
-- [ ] T052 [US5] US5 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us5/ && pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で PASS 確認
+- [x] T052 [US5] US5 で変更したコードをレビュー・リファクタリング。`pnpm test:unit:only tests/unit/domains/products/us5/ && pnpm test:integration:only tests/integration/domains/products/us5/ 2>&1` で PASS 確認
 
 ---
 
@@ -226,15 +226,15 @@
 
 **目的**: 全体品質確認・リグレッション検出
 
-- [ ] T053 TypeScript strict チェック: `pnpm exec tsc --noEmit 2>&1` でエラー 0件を確認
+- [x] T053 TypeScript strict チェック: `pnpm exec tsc --noEmit 2>&1` でエラー 0件を確認
 
-- [ ] T054 ESLint チェック: `pnpm lint 2>&1` でエラー 0件を確認（警告は許容）
+- [x] T054 ESLint チェック: `pnpm lint 2>&1` でエラー 0件を確認（警告は許容）
 
-- [ ] T055 単体テスト全件: `pnpm test:unit 2>&1` で全 PASS 確認（サンプルテスト除く）
+- [x] T055 単体テスト全件: `pnpm test:unit 2>&1` で全 PASS 確認（サンプルテスト除く）
 
-- [ ] T056 統合テスト全件: `pnpm test:integration 2>&1` で全 PASS 確認
+- [x] T056 統合テスト全件: `pnpm test:integration 2>&1` で全 PASS 確認
 
-- [ ] T057 E2E テスト全件（リグレッション確認）: `pnpm test:e2e 2>&1` で全 PASS 確認（Bash timeout: 300000ms）。サンプルテスト（`pnpm test:e2e:samples`）は実行しない
+- [x] T057 E2E テスト全件（リグレッション確認）: `pnpm test:e2e 2>&1` で全 PASS 確認（Bash timeout: 300000ms）。サンプルテスト（`pnpm test:e2e:samples`）は実行しない
 
 ---
 
