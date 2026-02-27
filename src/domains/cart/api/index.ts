@@ -1,7 +1,11 @@
 /**
- * Cart ドメイン - API スタブ実装
- * 本番実装で置き換え予定。すべての関数は NotImplementedError をスローする。
+ * Cart ドメイン - API 実装
  */
+// @see barrel: Layout, Header, Footer, ToastProvider, useToast, ConfirmDialog, Loading,
+//              Error, Empty, AlertBanner, ProductCard, ImagePlaceholder, QuantitySelector,
+//              Button, FormField, TextInput, TextArea, Select, SearchBar, Pagination,
+//              BackButton, StatusBadge, DataView, useFetch, useFormSubmit,
+//              formatPrice, formatDateTime, formatDate, deserializeDates, emitCartUpdated (@/components)
 import type { SessionData } from '@/foundation/auth/session';
 import type {
   CartRepository,
@@ -11,8 +15,11 @@ import type {
   UpdateCartItemOutput,
   RemoveFromCartOutput,
 } from '@/contracts/cart';
+import { AddToCartInputSchema, GetCartInputSchema, UpdateCartItemInputSchema, RemoveFromCartInputSchema } from '@/contracts/cart';
 import { AppError, ErrorCode } from '@/foundation/errors/handler';
 import { NotImplementedError, NotFoundError } from '@/foundation/errors/domain-errors';
+import { ForbiddenError } from '@/foundation/auth/authorize';
+import { validate } from '@/foundation/validation/runtime';
 
 // re-export for consumers
 export { NotImplementedError, NotFoundError };
@@ -36,18 +43,61 @@ export class CartItemNotFoundError extends AppError {
   }
 }
 
-export function getCart(_rawInput: unknown, _context: CartContext): Promise<GetCartOutput> {
-  throw new NotImplementedError('cart', 'getCart');
+export async function getCart(rawInput: unknown, context: CartContext): Promise<GetCartOutput> {
+  if (context.session.role !== 'buyer') {
+    throw new ForbiddenError();
+  }
+  validate(GetCartInputSchema, rawInput);
+  let cart = await context.repository.findByUserId(context.session.userId);
+  if (!cart) cart = await context.repository.create(context.session.userId);
+  return cart;
 }
 
-export function addToCart(_rawInput: unknown, _context: CartContext): Promise<AddToCartOutput> {
-  throw new NotImplementedError('cart', 'addToCart');
+export async function addToCart(rawInput: unknown, context: CartContext): Promise<AddToCartOutput> {
+  if (context.session.role !== 'buyer') {
+    throw new ForbiddenError();
+  }
+  const input = validate(AddToCartInputSchema, rawInput);
+  const product = await context.productFetcher.findById(input.productId);
+  if (!product) throw new NotFoundError('商品が見つかりません');
+
+  const existingCart = await context.repository.findByUserId(context.session.userId);
+  const existingItem = existingCart?.items.find((item) => item.productId === input.productId);
+  const currentQuantity = existingItem?.quantity ?? 0;
+
+  const quantity = input.quantity ?? 1;
+  if (currentQuantity + quantity > product.stock) {
+    throw new AppError(ErrorCode.CONFLICT, '在庫不足です');
+  }
+
+  return context.repository.addItem(context.session.userId, {
+    productId: product.id,
+    productName: product.name,
+    price: product.price,
+    imageUrl: product.imageUrl,
+    quantity,
+  });
 }
 
-export function updateCartItem(_rawInput: unknown, _context: CartContext): Promise<UpdateCartItemOutput> {
-  throw new NotImplementedError('cart', 'updateCartItem');
+export async function updateCartItem(rawInput: unknown, context: CartContext): Promise<UpdateCartItemOutput> {
+  if (context.session.role !== 'buyer') {
+    throw new ForbiddenError();
+  }
+  const input = validate(UpdateCartItemInputSchema, rawInput);
+  const product = await context.productFetcher.findById(input.productId);
+  if (!product) throw new NotFoundError('商品が見つかりません');
+
+  if (input.quantity > product.stock) {
+    throw new AppError(ErrorCode.CONFLICT, '在庫不足です');
+  }
+
+  return context.repository.updateItemQuantity(context.session.userId, input.productId, input.quantity);
 }
 
-export function removeFromCart(_rawInput: unknown, _context: CartContext): Promise<RemoveFromCartOutput> {
-  throw new NotImplementedError('cart', 'removeFromCart');
+export async function removeFromCart(rawInput: unknown, context: CartContext): Promise<RemoveFromCartOutput> {
+  if (context.session.role !== 'buyer') {
+    throw new ForbiddenError();
+  }
+  const input = validate(RemoveFromCartInputSchema, rawInput);
+  return context.repository.removeItem(context.session.userId, input.productId);
 }

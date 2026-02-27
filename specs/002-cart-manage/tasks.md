@@ -10,7 +10,7 @@
 
 **目的**: 依存関係確認
 
-- [ ] T001 `pnpm install` で依存関係が揃っていることを確認。`pnpm typecheck` と `pnpm lint` がエラー 0 件で通ることを確認
+- [x] T001 `pnpm install` で依存関係が揃っていることを確認。`pnpm typecheck` と `pnpm lint` がエラー 0 件で通ることを確認
 
 ---
 
@@ -20,8 +20,8 @@
 
 ⚠️ **CRITICAL**: このフェーズ完了前にユーザーストーリーの作業を始めてはならない
 
-- [ ] T002 `src/contracts/cart.ts` の `ProductFetcher` インターフェースに `stock: number` を追加（research.md Decision 2）
-- [ ] T003 `src/infrastructure/repositories/cart.ts` の `productFetcher.findById` 戻り値に `stock: product.stock` を追加（T002 に依存）
+- [x] T002 `src/contracts/cart.ts` の `ProductFetcher` インターフェースに `stock: number` を追加（research.md Decision 2）
+- [x] T003 `src/infrastructure/repositories/cart.ts` の `productFetcher.findById` 戻り値に `stock: product.stock` を追加（T002 に依存）
 
 ---
 
@@ -29,23 +29,23 @@
 
 **目的**: 全 US のスタブ一括生成。Red テスト作成の前提条件。
 
-- [ ] T004 前準備: `src/components/index.ts`, `src/templates/index.ts`, `src/app/(samples)/sample/api/cart/route.ts`, `src/app/(samples)/sample/api/cart/items/route.ts`, `src/app/(samples)/sample/api/cart/items/[productId]/route.ts`, `src/samples/domains/cart/api/index.ts`, `src/samples/domains/cart/ui/CartView.tsx` を Read し、createRouteHandler パターン・バレルエクスポート・CartViewProps を把握する
+- [x] T004 前準備: `src/components/index.ts`, `src/templates/index.ts`, `src/app/(samples)/sample/api/cart/route.ts`, `src/app/(samples)/sample/api/cart/items/route.ts`, `src/app/(samples)/sample/api/cart/items/[productId]/route.ts`, `src/samples/domains/cart/api/index.ts`, `src/samples/domains/cart/ui/CartView.tsx` を Read し、createRouteHandler パターン・バレルエクスポート・CartViewProps を把握する
 
-- [ ] T005 `src/app/api/cart/route.ts` を T004 で読んだサンプルに従い `createRouteHandler()` で書き換え（手書き try-catch 禁止）
+- [x] T005 `src/app/api/cart/route.ts` を T004 で読んだサンプルに従い `createRouteHandler()` で書き換え（手書き try-catch 禁止）
 
-- [ ] T006 `src/app/api/cart/items/route.ts` を `createRouteHandler()` で書き換え（手書き try-catch 禁止）
+- [x] T006 `src/app/api/cart/items/route.ts` を `createRouteHandler()` で書き換え（手書き try-catch 禁止）
 
-- [ ] T007 `src/app/api/cart/items/[productId]/route.ts` を `createRouteHandler()` で書き換え（手書き try-catch 禁止）
+- [x] T007 `src/app/api/cart/items/[productId]/route.ts` を `createRouteHandler()` で書き換え（手書き try-catch 禁止）
 
-- [ ] T008 `src/domains/cart/api/index.ts` と `src/domains/cart/ui/index.tsx` を更新:
+- [x] T008 `src/domains/cart/api/index.ts` と `src/domains/cart/ui/index.tsx` を更新:
   - api: `getCart`/`addToCart`/`updateCartItem`/`removeFromCart` は引き続き `throw new NotImplementedError(...)` のまま（JSX 返却禁止）
   - api 先頭に `// @see barrel: [T004 で読んだ @/components の全エクスポートを列挙]` コメントを付与
   - ui: `CartView` は `throw new NotImplementedError('cart', 'CartView')` のみ（JSX 返却禁止）
   - ui 先頭に `// @see barrel: [T004 で読んだ @/components の全エクスポートを列挙]` コメントを付与
 
-- [ ] T009 `src/domains/catalog/ui/index.tsx` の `ProductDetailProps` に `onAddToCart?: (productId: string) => void` と `isAddingToCart?: boolean` を追加し、ボタン `onClick` と `disabled` に接続するスタブを記述
+- [x] T009 `src/domains/catalog/ui/index.tsx` の `ProductDetailProps` に `onAddToCart?: (productId: string) => void` と `isAddingToCart?: boolean` を追加し、ボタン `onClick` と `disabled` に接続するスタブを記述
 
-- [ ] T010 `src/app/(buyer)/cart/page.tsx` を `'use client'` + `useFetch<Cart>('/api/cart')` + `<DataView>` + `{(cart) => <CartView cart={cart} />}` 形式に書き換え（CartView は T008 のスタブを使用）。`loadingMessage="カートを読み込み中..."` を設定
+- [x] T010 `src/app/(buyer)/cart/page.tsx` を `'use client'` + `useFetch<Cart>('/api/cart')` + `<DataView>` + `{(cart) => <CartView cart={cart} />}` 形式に書き換え（CartView は T008 のスタブを使用）。`loadingMessage="カートを読み込み中..."` を設定
 
 ---
 
@@ -59,23 +59,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T011 [P] [US1] `tests/unit/domains/cart/us1/usecase.test.ts` を作成 (AC-1,2,3,5 / FR-001,002,003,007)。テスト対象: `addToCart`。モック: `CartRepository`, `ProductFetcher`。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で FAIL 確認
+- [x] T011 [P] [US1] `tests/unit/domains/cart/us1/usecase.test.ts` を作成 (AC-1,2,3,5 / FR-001,002,003,007)。テスト対象: `addToCart`。モック: `CartRepository`, `ProductFetcher`。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で FAIL 確認
 
-- [ ] T012 [P] [US1] `tests/unit/domains/cart/us1/product-detail.test.tsx` を作成 (AC-4,6 / FR-004,005)。テスト対象: `ProductDetail`。stock=0 でボタン disabled、isAddingToCart=true でボタン disabled、onAddToCart がクリック時に呼ばれる。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で FAIL 確認
+- [x] T012 [P] [US1] `tests/unit/domains/cart/us1/product-detail.test.tsx` を作成 (AC-4,6 / FR-004,005)。テスト対象: `ProductDetail`。stock=0 でボタン disabled、isAddingToCart=true でボタン disabled、onAddToCart がクリック時に呼ばれる。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で FAIL 確認
 
-- [ ] T013 [P] [US1] `tests/integration/domains/cart/us1/api.test.ts` を作成 (AC-1,2,3,5 / FR-001,002,003,007)。テスト対象: `POST /api/cart/items`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` で FAIL 確認
+- [x] T013 [P] [US1] `tests/integration/domains/cart/us1/api.test.ts` を作成 (AC-1,2,3,5 / FR-001,002,003,007)。テスト対象: `POST /api/cart/items`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` で FAIL 確認
 
-- [ ] T014 [US1] `tests/e2e/cart-us1.spec.ts` を作成 (AC-1,5)。`src/app/(buyer)/catalog/[id]/page.tsx` と seed データを Read 後に作成。「カートに追加」→ トースト表示 (AC-1)、未ログイン→ /login リダイレクト (AC-5)。`pnpm test:e2e --retries 0 tests/e2e/cart-us1.spec.ts 2>&1` で FAIL 確認
+- [x] T014 [US1] `tests/e2e/cart-us1.spec.ts` を作成 (AC-1,5)。`src/app/(buyer)/catalog/[id]/page.tsx` と seed データを Read 後に作成。「カートに追加」→ トースト表示 (AC-1)、未ログイン→ /login リダイレクト (AC-5)。`pnpm test:e2e --retries 0 tests/e2e/cart-us1.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
-- [ ] T015 [US1] `src/domains/cart/api/index.ts` の `addToCart` を実装 (FR-001〜007)。`authorize(session,'buyer')` → `validate` → `productFetcher.findById` → 在庫チェック → `repository.addItem`。在庫不足は `AppError(ErrorCode.UNPROCESSABLE_ENTITY, '在庫不足です')`。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で PASS 確認
+- [x] T015 [US1] `src/domains/cart/api/index.ts` の `addToCart` を実装 (FR-001〜007)。`authorize(session,'buyer')` → `validate` → `productFetcher.findById` → 在庫チェック → `repository.addItem`。在庫不足は `AppError(ErrorCode.UNPROCESSABLE_ENTITY, '在庫不足です')`。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` で PASS 確認
 
-- [ ] T016 [US1] `src/domains/catalog/ui/index.tsx` の `ProductDetail` で `onAddToCart` を button の onClick に接続。`src/app/(buyer)/catalog/[id]/page.tsx` に `useFormSubmit` で addToCart API 呼び出し・401時 router.push('/login?callbackUrl=...')・`emitCartUpdated()`・`useToast` を追加。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us1.spec.ts 2>&1` で PASS 確認
+- [x] T016 [US1] `src/domains/catalog/ui/index.tsx` の `ProductDetail` で `onAddToCart` を button の onClick に接続。`src/app/(buyer)/catalog/[id]/page.tsx` に `useFormSubmit` で addToCart API 呼び出し・401時 router.push('/login?callbackUrl=...')・`emitCartUpdated()`・`useToast` を追加。`pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us1.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T017 [US1] T015〜T016 で変更したファイルを Read しレビュー → 必要に応じてリファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us1.spec.ts 2>&1` で PASS 確認
+- [x] T017 [US1] T015〜T016 で変更したファイルを Read しレビュー → 必要に応じてリファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us1/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us1/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us1.spec.ts 2>&1` で PASS 確認
 
 ---
 
@@ -89,25 +89,25 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T018 [P] [US2] `tests/unit/domains/cart/us2/usecase.test.ts` を作成 (AC-1,2,3 / FR-008,009,010)。テスト対象: `getCart`。カートなし→空カート作成、カートあり→返却。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で FAIL 確認
+- [x] T018 [P] [US2] `tests/unit/domains/cart/us2/usecase.test.ts` を作成 (AC-1,2,3 / FR-008,009,010)。テスト対象: `getCart`。カートなし→空カート作成、カートあり→返却。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で FAIL 確認
 
-- [ ] T019 [P] [US2] `tests/unit/domains/cart/us2/cart-view.test.tsx` を作成 (AC-1,2,3 / FR-008,009,010)。テスト対象: `CartView`。商品一覧表示・税金計算表示・空カートメッセージ。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で FAIL 確認
+- [x] T019 [P] [US2] `tests/unit/domains/cart/us2/cart-view.test.tsx` を作成 (AC-1,2,3 / FR-008,009,010)。テスト対象: `CartView`。商品一覧表示・税金計算表示・空カートメッセージ。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で FAIL 確認
 
-- [ ] T020 [P] [US2] `tests/integration/domains/cart/us2/api.test.ts` を作成 (AC-1,2,3)。テスト対象: `GET /api/cart`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us2/ 2>&1` で FAIL 確認
+- [x] T020 [P] [US2] `tests/integration/domains/cart/us2/api.test.ts` を作成 (AC-1,2,3)。テスト対象: `GET /api/cart`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us2/ 2>&1` で FAIL 確認
 
-- [ ] T021 [US2] `tests/e2e/cart-us2.spec.ts` を作成 (AC-1,2,3)。`src/app/(buyer)/cart/page.tsx` と `src/samples/domains/cart/ui/CartView.tsx` の testid を Read 後に作成。商品合計・消費税・総合計の表示確認 (AC-2)、空カートメッセージと商品一覧リンク (AC-3)。`pnpm test:e2e --retries 0 tests/e2e/cart-us2.spec.ts 2>&1` で FAIL 確認
+- [x] T021 [US2] `tests/e2e/cart-us2.spec.ts` を作成 (AC-1,2,3)。`src/app/(buyer)/cart/page.tsx` と `src/samples/domains/cart/ui/CartView.tsx` の testid を Read 後に作成。商品合計・消費税・総合計の表示確認 (AC-2)、空カートメッセージと商品一覧リンク (AC-3)。`pnpm test:e2e --retries 0 tests/e2e/cart-us2.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
-- [ ] T022 [US2] `src/domains/cart/api/index.ts` の `getCart` を実装 (FR-008〜010)。`authorize` → `findByUserId` → なければ `create`。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で PASS 確認
+- [x] T022 [US2] `src/domains/cart/api/index.ts` の `getCart` を実装 (FR-008〜010)。`authorize` → `findByUserId` → なければ `create`。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で PASS 確認
 
-- [ ] T023 [US2] `src/domains/cart/ui/index.tsx` の `CartView` を実装 (FR-008〜010)。`src/samples/domains/cart/ui/CartView.tsx` を参照。税金計算 `Math.floor(cart.subtotal * 0.1)`、空カート時は「カートに商品がありません」+ 商品一覧リンク。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で PASS 確認
+- [x] T023 [US2] `src/domains/cart/ui/index.tsx` の `CartView` を実装 (FR-008〜010)。`src/samples/domains/cart/ui/CartView.tsx` を参照。税金計算 `Math.floor(cart.subtotal * 0.1)`、空カート時は「カートに商品がありません」+ 商品一覧リンク。`pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` で PASS 確認
 
-- [ ] T024 [US2] `src/app/(buyer)/cart/page.tsx` を更新: `useFetch<Cart>('/api/cart')` の結果を `<DataView>` → `{(cart) => <CartView cart={cart} />}` で表示。`pnpm test:e2e -x tests/e2e/cart-us2.spec.ts 2>&1` で PASS 確認
+- [x] T024 [US2] `src/app/(buyer)/cart/page.tsx` を更新: `useFetch<Cart>('/api/cart')` の結果を `<DataView>` → `{(cart) => <CartView cart={cart} />}` で表示。`pnpm test:e2e -x tests/e2e/cart-us2.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T025 [US2] T022〜T024 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us2/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us2.spec.ts 2>&1` で PASS 確認
+- [x] T025 [US2] T022〜T024 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us2/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us2/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us2.spec.ts 2>&1` で PASS 確認
 
 ---
 
@@ -121,23 +121,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T026 [P] [US3] `tests/unit/domains/cart/us3/usecase.test.ts` を作成 (AC-1,2 / FR-011,012)。テスト対象: `updateCartItem`。有効範囲内→成功、在庫超過→エラー。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で FAIL 確認
+- [x] T026 [P] [US3] `tests/unit/domains/cart/us3/usecase.test.ts` を作成 (AC-1,2 / FR-011,012)。テスト対象: `updateCartItem`。有効範囲内→成功、在庫超過→エラー。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で FAIL 確認
 
-- [ ] T027 [P] [US3] `tests/unit/domains/cart/us3/cart-view.test.tsx` を作成 (AC-3 / FR-011)。テスト対象: `CartView`。`QuantitySelector` が `onChange` 呼び出し時に `onUpdateQuantity` を呼ぶ。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で FAIL 確認
+- [x] T027 [P] [US3] `tests/unit/domains/cart/us3/cart-view.test.tsx` を作成 (AC-3 / FR-011)。テスト対象: `CartView`。`QuantitySelector` が `onChange` 呼び出し時に `onUpdateQuantity` を呼ぶ。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で FAIL 確認
 
-- [ ] T028 [P] [US3] `tests/integration/domains/cart/us3/api.test.ts` を作成 (AC-1,2 / FR-011,012)。テスト対象: `PUT /api/cart/items/:productId`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` で FAIL 確認
+- [x] T028 [P] [US3] `tests/integration/domains/cart/us3/api.test.ts` を作成 (AC-1,2 / FR-011,012)。テスト対象: `PUT /api/cart/items/:productId`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` で FAIL 確認
 
-- [ ] T029 [US3] `tests/e2e/cart-us3.spec.ts` を作成 (AC-1,2)。CartView の testid を Read 後に作成（data-testid="quantity-increment" 等）。+ ボタン → 数量増加・小計更新 (AC-1)。在庫超過時エラートースト (AC-2)。`pnpm test:e2e --retries 0 tests/e2e/cart-us3.spec.ts 2>&1` で FAIL 確認
+- [x] T029 [US3] `tests/e2e/cart-us3.spec.ts` を作成 (AC-1,2)。CartView の testid を Read 後に作成（data-testid="quantity-increment" 等）。+ ボタン → 数量増加・小計更新 (AC-1)。在庫超過時エラートースト (AC-2)。`pnpm test:e2e --retries 0 tests/e2e/cart-us3.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
-- [ ] T030 [US3] `src/domains/cart/api/index.ts` の `updateCartItem` を実装 (FR-011,012)。`authorize` → `validate` → `productFetcher.findById` → 在庫チェック → `repository.updateItemQuantity`。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で PASS 確認
+- [x] T030 [US3] `src/domains/cart/api/index.ts` の `updateCartItem` を実装 (FR-011,012)。`authorize` → `validate` → `productFetcher.findById` → 在庫チェック → `repository.updateItemQuantity`。`pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` で PASS 確認
 
-- [ ] T031 [US3] `src/app/(buyer)/cart/page.tsx` に `handleUpdateQuantity` を追加: `PUT /api/cart/items/:productId` 呼び出し → `refetch()` → `emitCartUpdated()`。エラー時は `useToast` で表示。CartView に `onUpdateQuantity={handleUpdateQuantity}` を渡す。`pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us3.spec.ts 2>&1` で PASS 確認
+- [x] T031 [US3] `src/app/(buyer)/cart/page.tsx` に `handleUpdateQuantity` を追加: `PUT /api/cart/items/:productId` 呼び出し → `refetch()` → `emitCartUpdated()`。エラー時は `useToast` で表示。CartView に `onUpdateQuantity={handleUpdateQuantity}` を渡す。`pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us3.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T032 [US3] T030〜T031 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us3.spec.ts 2>&1` で PASS 確認
+- [x] T032 [US3] T030〜T031 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us3/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us3/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us3.spec.ts 2>&1` で PASS 確認
 
 ---
 
@@ -151,23 +151,23 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T033 [P] [US4] `tests/unit/domains/cart/us4/usecase.test.ts` を作成 (AC-2,3 / FR-014)。テスト対象: `removeFromCart`。削除成功・最後の1件削除→空カート。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で FAIL 確認
+- [x] T033 [P] [US4] `tests/unit/domains/cart/us4/usecase.test.ts` を作成 (AC-2,3 / FR-014)。テスト対象: `removeFromCart`。削除成功・最後の1件削除→空カート。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で FAIL 確認
 
-- [ ] T034 [P] [US4] `tests/unit/domains/cart/us4/cart-view.test.tsx` を作成 (AC-1,4 / FR-013)。テスト対象: `CartView`。削除ボタンクリック→ ConfirmDialog 表示 (data-testid="confirm-dialog")、キャンセル→ダイアログ非表示。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で FAIL 確認
+- [x] T034 [P] [US4] `tests/unit/domains/cart/us4/cart-view.test.tsx` を作成 (AC-1,4 / FR-013)。テスト対象: `CartView`。削除ボタンクリック→ ConfirmDialog 表示 (data-testid="confirm-dialog")、キャンセル→ダイアログ非表示。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で FAIL 確認
 
-- [ ] T035 [P] [US4] `tests/integration/domains/cart/us4/api.test.ts` を作成 (AC-2,3)。テスト対象: `DELETE /api/cart/items/:productId`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` で FAIL 確認
+- [x] T035 [P] [US4] `tests/integration/domains/cart/us4/api.test.ts` を作成 (AC-2,3)。テスト対象: `DELETE /api/cart/items/:productId`。`resetCartStore()` を beforeEach で実行。`pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` で FAIL 確認
 
-- [ ] T036 [US4] `tests/e2e/cart-us4.spec.ts` を作成 (AC-1,2,3,4)。ConfirmDialog の testid を確認済み（data-testid="confirm-dialog","confirm-button","cancel-button"）。削除フロー全体を検証。`pnpm test:e2e --retries 0 tests/e2e/cart-us4.spec.ts 2>&1` で FAIL 確認
+- [x] T036 [US4] `tests/e2e/cart-us4.spec.ts` を作成 (AC-1,2,3,4)。ConfirmDialog の testid を確認済み（data-testid="confirm-dialog","confirm-button","cancel-button"）。削除フロー全体を検証。`pnpm test:e2e --retries 0 tests/e2e/cart-us4.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
-- [ ] T037 [US4] `src/domains/cart/api/index.ts` の `removeFromCart` を実装 (FR-013,014)。`authorize` → `validate` → カート存在チェック → アイテム存在チェック → `repository.removeItem`。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で PASS 確認
+- [x] T037 [US4] `src/domains/cart/api/index.ts` の `removeFromCart` を実装 (FR-013,014)。`authorize` → `validate` → カート存在チェック → アイテム存在チェック → `repository.removeItem`。`pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` で PASS 確認
 
-- [ ] T038 [US4] `src/app/(buyer)/cart/page.tsx` に `handleRemove` を追加: `DELETE /api/cart/items/:productId` 呼び出し → `refetch()` → `emitCartUpdated()`。CartView に `onRemove={handleRemove}` を渡す。`pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us4.spec.ts 2>&1` で PASS 確認
+- [x] T038 [US4] `src/app/(buyer)/cart/page.tsx` に `handleRemove` を追加: `DELETE /api/cart/items/:productId` 呼び出し → `refetch()` → `emitCartUpdated()`。CartView に `onRemove={handleRemove}` を渡す。`pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us4.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T039 [US4] T037〜T038 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us4.spec.ts 2>&1` で PASS 確認
+- [x] T039 [US4] T037〜T038 で変更したファイルを Read しレビュー → リファクタリング → `pnpm test:unit:only tests/unit/domains/cart/us4/ 2>&1` と `pnpm test:integration:only tests/integration/domains/cart/us4/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us4.spec.ts 2>&1` で PASS 確認
 
 ---
 
@@ -181,17 +181,17 @@
 
 ⚠️ 禁止: 引数なし toThrow(), 条件付きアサーション(if→expect), it.todo/skip, テスト名「未実装」
 
-- [ ] T040 [P] [US5] `tests/unit/domains/cart/us5/usecase.test.ts` を作成 (AC-1,2 / FR-015)。テスト対象: `getCart`（既存アイテムがある場合）。事前に addItem → getCart → items が保持されている。`pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` で FAIL 確認（getCart 未実装のため）
+- [x] T040 [P] [US5] `tests/unit/domains/cart/us5/usecase.test.ts` を作成 (AC-1,2 / FR-015)。テスト対象: `getCart`（既存アイテムがある場合）。事前に addItem → getCart → items が保持されている。`pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` で FAIL 確認（getCart 未実装のため）
 
-- [ ] T041 [US5] `tests/e2e/cart-us5.spec.ts` を作成 (AC-1,2)。カート追加→/catalog に遷移→/cart に戻る→保持確認 (AC-1)。カート追加→リロード→保持確認 (AC-2)。`pnpm test:e2e --retries 0 tests/e2e/cart-us5.spec.ts 2>&1` で FAIL 確認
+- [x] T041 [US5] `tests/e2e/cart-us5.spec.ts` を作成 (AC-1,2)。カート追加→/catalog に遷移→/cart に戻る→保持確認 (AC-1)。カート追加→リロード→保持確認 (AC-2)。`pnpm test:e2e --retries 0 tests/e2e/cart-us5.spec.ts 2>&1` で FAIL 確認
 
 ### Green
 
-- [ ] T042 [US5] 既存の `createStore` によるインメモリ実装が FR-015 を充足（実装変更なし）。`pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` で PASS 確認（getCart が US2 で実装済みのため）。`pnpm test:e2e -x tests/e2e/cart-us5.spec.ts 2>&1` で PASS 確認
+- [x] T042 [US5] 既存の `createStore` によるインメモリ実装が FR-015 を充足（実装変更なし）。`pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` で PASS 確認（getCart が US2 で実装済みのため）。`pnpm test:e2e -x tests/e2e/cart-us5.spec.ts 2>&1` で PASS 確認
 
 ### Refactor
 
-- [ ] T043 [US5] `pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us5.spec.ts 2>&1` で全件 PASS 確認。変更なし
+- [x] T043 [US5] `pnpm test:unit:only tests/unit/domains/cart/us5/ 2>&1` と `pnpm test:e2e -x tests/e2e/cart-us5.spec.ts 2>&1` で全件 PASS 確認。変更なし
 
 ---
 
@@ -199,17 +199,17 @@
 
 **目的**: TypeScript/lint チェック・nav.ts 更新・全件テストでリグレッション検出
 
-- [ ] T044 `pnpm typecheck 2>&1` でエラー 0 件を確認。エラーがあれば修正する
+- [x] T044 `pnpm typecheck 2>&1` でエラー 0 件を確認。エラーがあれば修正する
 
-- [ ] T045 `pnpm lint 2>&1` でエラー 0 件を確認。エラーがあれば修正する
+- [x] T045 `pnpm lint 2>&1` でエラー 0 件を確認。エラーがあれば修正する
 
-- [ ] T046 `src/app/(buyer)/nav.ts` に `{ href: '/cart', label: 'カート' }` を追加
+- [x] T046 `src/app/(buyer)/nav.ts` に `{ href: '/cart', label: 'カート' }` を追加
 
-- [ ] T047 `pnpm test:unit 2>&1` で全件 PASS を確認
+- [x] T047 `pnpm test:unit 2>&1` で全件 PASS を確認
 
-- [ ] T048 `pnpm test:integration 2>&1` で全件 PASS を確認
+- [x] T048 `pnpm test:integration 2>&1` で全件 PASS を確認
 
-- [ ] T049 `pnpm test:e2e 2>&1` で全件 PASS を確認（リグレッション検出）
+- [x] T049 `pnpm test:e2e 2>&1` で全件 PASS を確認（リグレッション検出）
 
 ---
 

@@ -5,65 +5,35 @@ import { NextRequest, NextResponse } from 'next/server';
 import { updateCartItem, removeFromCart } from '@/domains/cart/api';
 import { cartRepository, productFetcher } from '@/infrastructure/repositories';
 import { getServerSession } from '@/infrastructure/auth';
-import { success, error } from '@/foundation/errors/response';
-import { handleError, ErrorCode } from '@/foundation/errors/handler';
-import { logger } from '@/foundation/logging/logger';
+import { success } from '@/foundation/errors/response';
+import { createRouteHandler } from '@/templates/api/route-handler';
+import type { Session } from '@/foundation/auth/session';
+
+const { handler } = createRouteHandler<Session>({ getSession: getServerSession });
 
 type Params = { params: Promise<{ productId: string }> };
 
-export async function PUT(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json(
-        error(ErrorCode.UNAUTHORIZED, 'ログインが必要です'),
-        { status: 401 }
-      );
-    }
-
-    const { productId } = await params;
-    const body = await request.json();
-    const result = await updateCartItem({ ...body, productId }, {
-      session,
+export async function PUT(request: NextRequest, routeParams: Params) {
+  return handler(request, async (req, ctx) => {
+    const body = await req.json();
+    const result = await updateCartItem({ ...body, productId: ctx.params.productId }, {
+      session: ctx.session,
       repository: cartRepository,
       productFetcher,
     });
 
     return NextResponse.json(success(result));
-  } catch (err) {
-    const result = handleError(err);
-    logger.error('PUT /api/cart/items/[productId] error:', err instanceof Error ? err : undefined);
-    return NextResponse.json(
-      error(result.code, result.message, result.fieldErrors),
-      { status: result.httpStatus }
-    );
-  }
+  }, routeParams);
 }
 
-export async function DELETE(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json(
-        error(ErrorCode.UNAUTHORIZED, 'ログインが必要です'),
-        { status: 401 }
-      );
-    }
-
-    const { productId } = await params;
-    const result = await removeFromCart({ productId }, {
-      session,
+export async function DELETE(request: NextRequest, routeParams: Params) {
+  return handler(request, async (_req, ctx) => {
+    const result = await removeFromCart({ productId: ctx.params.productId }, {
+      session: ctx.session,
       repository: cartRepository,
       productFetcher,
     });
 
     return NextResponse.json(success(result));
-  } catch (err) {
-    const result = handleError(err);
-    logger.error('DELETE /api/cart/items/[productId] error:', err instanceof Error ? err : undefined);
-    return NextResponse.json(
-      error(result.code, result.message, result.fieldErrors),
-      { status: result.httpStatus }
-    );
-  }
+  }, routeParams);
 }

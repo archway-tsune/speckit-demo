@@ -114,6 +114,7 @@ export const productFetcher: ProductFetcher = {
       id: product.id,
       name: product.name,
       price: product.price,
+      stock: product.stock,
       imageUrl: product.imageUrl,
     };
   },
