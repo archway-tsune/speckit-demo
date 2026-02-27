@@ -20,9 +20,9 @@ describe('ナビゲーション設定ファイル（本番）', () => {
   });
 
   describe('本番 admin nav.ts', () => {
-    test('adminNavLinks が NavLink[] 型の空配列をエクスポートする', async () => {
+    test('adminNavLinks が /admin/orders エントリを含む', async () => {
       const { adminNavLinks } = await import('@/app/admin/nav');
-      expect(adminNavLinks).toEqual([]);
+      expect(adminNavLinks).toContainEqual({ href: '/admin/orders', label: '注文管理' });
     });
   });
 });
