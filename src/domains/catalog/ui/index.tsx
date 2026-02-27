@@ -28,6 +28,8 @@ export interface ProductListProps {
 export interface ProductDetailProps {
   product: Product;
   onBack: () => void;
+  onAddToCart?: (productId: string) => void;
+  isAddingToCart?: boolean;
 }
 
 export function ProductList({ products, pagination, onPageChange, onSearch, searchQuery }: ProductListProps): ReactNode {
@@ -90,7 +92,7 @@ export function ProductList({ products, pagination, onPageChange, onSearch, sear
   );
 }
 
-export function ProductDetail({ product, onBack }: ProductDetailProps): ReactNode {
+export function ProductDetail({ product, onBack, onAddToCart, isAddingToCart }: ProductDetailProps): ReactNode {
   return (
     <div className="mx-auto max-w-4xl">
       <BackButton label="一覧に戻る" onClick={onBack} />
@@ -116,8 +118,12 @@ export function ProductDetail({ product, onBack }: ProductDetailProps): ReactNod
           </div>
           <div className="mt-8">
             {product.stock > 0 ? (
-              <Button className="w-full py-3 text-base">
-                カートに追加
+              <Button
+                className="w-full py-3 text-base"
+                disabled={isAddingToCart}
+                onClick={() => onAddToCart?.(product.id)}
+              >
+                {isAddingToCart ? '追加中...' : 'カートに追加'}
               </Button>
             ) : (
               <Button disabled className="w-full py-3 text-base">
