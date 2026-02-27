@@ -19,6 +19,7 @@ export interface CartViewProps {
   cart: Cart;
   onUpdateQuantity?: (productId: string, quantity: number) => void;
   onRemove?: (productId: string) => void;
+  onCheckout?: () => void;
 }
 
 function CartItemRow({ item, onUpdateQuantity, onRequestRemove }: {
@@ -56,7 +57,7 @@ function CartItemRow({ item, onUpdateQuantity, onRequestRemove }: {
   );
 }
 
-export function CartView({ cart, onUpdateQuantity, onRemove }: CartViewProps) {
+export function CartView({ cart, onUpdateQuantity, onRemove, onCheckout }: CartViewProps) {
   const [pendingRemoveId, setPendingRemoveId] = useState<string | null>(null);
 
   if (cart.items.length === 0) {
@@ -99,6 +100,15 @@ export function CartView({ cart, onUpdateQuantity, onRemove }: CartViewProps) {
             <span>合計</span>
             <span data-testid="cart-total">{formatPrice(total)}</span>
           </div>
+        </div>
+        <div className="mt-6">
+          <a
+            href="/checkout"
+            onClick={onCheckout ? (e) => { e.preventDefault(); onCheckout(); } : undefined}
+            className="block w-full rounded-md bg-base-900 py-3 text-center text-white hover:bg-base-900/90"
+          >
+            注文手続きへ
+          </a>
         </div>
       </div>
       <ConfirmDialog

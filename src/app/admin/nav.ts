@@ -4,4 +4,6 @@ export interface NavLink {
   label: string;
 }
 
-export const adminNavLinks: NavLink[] = [];
+export const adminNavLinks: NavLink[] = [
+  { href: '/admin/orders', label: '注文管理' },
+];

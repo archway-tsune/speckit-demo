@@ -42,6 +42,8 @@ export const orderRepository: OrderRepository = {
       id: generateId(),
       userId: data.userId,
       items: data.items,
+      subtotal: data.subtotal,
+      tax: data.tax,
       totalAmount: data.totalAmount,
       status: data.status,
       createdAt: now,

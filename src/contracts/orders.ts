@@ -36,6 +36,11 @@ export const OrderSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   items: z.array(OrderItemSchema).min(1),
+  /** 税抜小計（カートの subtotal） */
+  subtotal: z.number().int().min(0),
+  /** 消費税（floor(subtotal × 0.1)） */
+  tax: z.number().int().min(0),
+  /** 税込合計（subtotal + tax） */
   totalAmount: z.number().int().min(0),
   status: OrderStatusSchema,
   createdAt: z.coerce.date(),
